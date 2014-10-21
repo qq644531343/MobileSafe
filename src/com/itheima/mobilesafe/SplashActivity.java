@@ -8,29 +8,41 @@
 
 package com.itheima.mobilesafe;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import net.tsz.afinal.FinalHttp;
+import net.tsz.afinal.http.AjaxCallBack;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.itheima.mobilesafe.utils.StreamTools;
-
+import android.R.anim;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.itheima.mobilesafe.utils.StreamTools;
 
 public class SplashActivity extends Activity {
 	
@@ -43,6 +55,11 @@ public class SplashActivity extends Activity {
 	protected static final int JSON_ERROR = 4;
 	
 	private TextView tv_splash_version;
+	private TextView tv_splash_updateinfo;
+	
+	private String apkurl;
+	private String  version;
+	private String description;
 	
 	private Handler handler = new Handler(){
 
@@ -53,7 +70,7 @@ public class SplashActivity extends Activity {
 			Log.i(TAG, "升级检测结果: "+msg.what);
 			switch (msg.what ) {
 			case SHOW_UPDATE_DIALOG:
-				
+				showUpdateDialog();
 				break;
 			case ENTER_HOME:
 				enterHome();
@@ -85,6 +102,7 @@ public class SplashActivity extends Activity {
 		
 		tv_splash_version = (TextView)findViewById(R.id.tv_splash_version);
 		tv_splash_version.setText(getString(R.string.appversion) + getVersionName());
+		tv_splash_updateinfo = (TextView)findViewById(R.id.tv_splash_updateinfo);
 		
 		//检查升级
 		checkUpdate();
@@ -94,6 +112,91 @@ public class SplashActivity extends Activity {
 		
 	}
 	
+	/**
+	 * 	弹出升级对话框
+	 */
+	protected void showUpdateDialog() {
+		// TODO Auto-generated method stub
+		AlertDialog.Builder builder = new Builder(this);
+		builder.setTitle("提示升级");
+		builder.setMessage(description);
+		builder.setPositiveButton("立刻升级", new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				//下载apk，并替换安装
+				if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+					//sdcard存在
+					//使用afinal框架下载apk
+					FinalHttp finalHttp = new FinalHttp();
+					tv_splash_updateinfo.setVisibility(View.VISIBLE);
+					Log.i(TAG, "apk url: " + apkurl);
+					finalHttp.download(apkurl, Environment.getExternalStorageDirectory().getAbsolutePath()+"/mobilesafe2.0.apk",
+							new AjaxCallBack<File>() {
+
+								@Override
+								public void onFailure(
+										Throwable t,
+										int errorNo,
+										String strMsg) {
+									// TODO Auto-generated method stub
+									t.printStackTrace();
+									Toast.makeText(SplashActivity.this, "下载失败", Toast.LENGTH_LONG).show();
+									
+									super.onFailure(t, errorNo, strMsg);
+								}
+
+								@Override
+								public void onLoading(
+										long count,
+										long current) {
+									// TODO Auto-generated method stub
+									super.onLoading(count, current);
+									int progress = (int) (current*100/count);
+									tv_splash_updateinfo.setText("下载进度: " + progress + "%");
+								}
+
+								@Override
+								public void onSuccess(
+										File t) {
+									// TODO Auto-generated method stub
+									Toast.makeText(SplashActivity.this, "下载成功", Toast.LENGTH_LONG).show();
+									installAPK(t);
+									super.onSuccess(t);
+								}
+								//安装apk
+								private void installAPK(
+										File t) {
+									// TODO Auto-generated method stub
+									Intent it = new Intent();
+									it.setAction("android.intent.action.VIEW");
+									it.addCategory("android.intent.category.DEFAULT");
+									it.setDataAndType(Uri.fromFile(t), "application/vnd.android.package-archive");
+									startActivity(it);
+								}
+						
+					});
+					
+				}else {
+					Toast.makeText(SplashActivity.this, "没有sdcard，请安装后再试", Toast.LENGTH_LONG).show();
+					return;
+				}
+			}
+		});
+		
+		builder.setNegativeButton("下次再说", new OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				dialog.dismiss();
+				enterHome();
+			}
+		});
+		builder.show();
+	}
+
 	protected void enterHome() {
 		// TODO Auto-generated method stub
 		 Intent it = new Intent(this, HomeActivity.class);
@@ -128,9 +231,9 @@ public class SplashActivity extends Activity {
 						Log.i(TAG, "联网成功了 " + result);
 						//json解析
 						JSONObject obj = new JSONObject(result);
-						String apkurl = (String)obj.get("apkurl");
-						String  version = (String)obj.get("version");
-						String description = (String)obj.get("description");
+						 apkurl = (String)obj.get("apkurl");
+						 version = (String)obj.get("version");
+						 description = (String)obj.get("description");
 						
 						//校验是否有新版本
 						if (getVersionName().equals(version)) {

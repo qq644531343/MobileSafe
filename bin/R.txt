@@ -247,7 +247,7 @@ int id action_context_bar 0x7f05001d
 int id action_menu_divider 0x7f050016
 int id action_menu_presenter 0x7f050017
 int id action_mode_close_button 0x7f050024
-int id action_settings 0x7f05003f
+int id action_settings 0x7f050041
 int id activity_chooser_view_content 0x7f050025
 int id always 0x7f05000b
 int id beginning 0x7f050011
@@ -272,6 +272,7 @@ int id middle 0x7f050012
 int id never 0x7f050009
 int id none 0x7f050010
 int id normal 0x7f050000
+int id pb_splash_progressBar 0x7f05003f
 int id progress_circular 0x7f050018
 int id progress_horizontal 0x7f050019
 int id radio 0x7f05002f
@@ -296,6 +297,7 @@ int id tabMode 0x7f050002
 int id textView1 0x7f05003c
 int id title 0x7f05002b
 int id top_action_bar 0x7f050020
+int id tv_splash_updateinfo 0x7f050040
 int id tv_splash_version 0x7f05003e
 int id up 0x7f050021
 int id useLogo 0x7f050003
