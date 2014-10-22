@@ -1,9 +1,9 @@
 /**
  * 	功能：
  * 	1，显示logo及启动页
- * 2，应用程序初始化
- * 3，检查版本信息
- * 4，检查版权
+ * 	2，应用程序初始化
+ * 	3，检查版本信息
+ * 	4，检查版权
  */
 
 package com.itheima.mobilesafe;
@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -39,6 +40,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -120,6 +122,19 @@ public class SplashActivity extends Activity {
 		AlertDialog.Builder builder = new Builder(this);
 		builder.setTitle("提示升级");
 		builder.setMessage(description);
+		
+//		builder.setCancelable(false);//强制升级
+		builder.setOnCancelListener(new OnCancelListener() {
+			
+			@Override
+			public void onCancel(DialogInterface dialog) {
+				// TODO Auto-generated method stub
+				Log.i(TAG, "用户触发非对话框区域");
+				enterHome();
+				dialog.dismiss();
+			}
+		});
+		
 		builder.setPositiveButton("立刻升级", new OnClickListener() {
 
 			@Override
@@ -174,6 +189,7 @@ public class SplashActivity extends Activity {
 									it.addCategory("android.intent.category.DEFAULT");
 									it.setDataAndType(Uri.fromFile(t), "application/vnd.android.package-archive");
 									startActivity(it);
+									finish();
 								}
 						
 					});

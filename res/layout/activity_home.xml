@@ -5,10 +5,32 @@
     android:orientation="vertical" >
 
     <TextView
+        android:textSize="22sp"
+        android:textColor="#000000"
+        android:background="#8866ff00"
         android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="呵呵我是主页"
+        android:layout_width="fill_parent"
+        android:layout_height="55dip"
+        android:gravity="center"
+        android:text="功能列表"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+    
+    <com.itheima.mobilesafe.ui.FocusedTextView 
+        android:text="最新的手机卫士，快来下载啊，下载送i6啊!!! 最新的手机卫士，快来下载啊，下载送i6啊!!!"
+        android:textSize="18sp"
+        android:ellipsize="marquee" 
+        android:singleLine="true"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        />
+    
+    <GridView
+        android:id="@+id/list_home"
+        android:numColumns="3"
+        android:layout_marginTop="15dip"
+        android:verticalSpacing="10dip"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         />
 
 </LinearLayout>
