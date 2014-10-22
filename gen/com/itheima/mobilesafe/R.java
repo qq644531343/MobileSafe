@@ -240,6 +240,22 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int customNavigationLayout=0x7f010032;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int desc_off=0x7f010070;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int desc_on=0x7f01006f;
         /**  Whether this spinner should mark child views as enabled/disabled when
              the spinner itself is enabled/disabled. 
          <p>Must be a boolean value, either "<code>true</code>" or "<code>false</code>".
@@ -744,6 +760,14 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int title=0x7f010025;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int title2=0x7f01006e;
         /**  Specifies a style to use for title text. 
          <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
@@ -2958,6 +2982,65 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
           @attr name com.itheima.mobilesafe:spinnerMode
         */
         public static final int Spinner_spinnerMode = 7;
+        /** Attributes that can be used with a TextView.
+           <p>Includes the following attributes:</p>
+           <table>
+           <colgroup align="left" />
+           <colgroup align="left" />
+           <tr><th>Attribute</th><th>Description</th></tr>
+           <tr><td><code>{@link #TextView_desc_off com.itheima.mobilesafe:desc_off}</code></td><td></td></tr>
+           <tr><td><code>{@link #TextView_desc_on com.itheima.mobilesafe:desc_on}</code></td><td></td></tr>
+           <tr><td><code>{@link #TextView_title2 com.itheima.mobilesafe:title2}</code></td><td></td></tr>
+           </table>
+           @see #TextView_desc_off
+           @see #TextView_desc_on
+           @see #TextView_title2
+         */
+        public static final int[] TextView = {
+            0x7f01006e, 0x7f01006f, 0x7f010070
+        };
+        /**
+          <p>This symbol is the offset where the {@link com.itheima.mobilesafe.R.attr#desc_off}
+          attribute's value can be found in the {@link #TextView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.itheima.mobilesafe:desc_off
+        */
+        public static final int TextView_desc_off = 2;
+        /**
+          <p>This symbol is the offset where the {@link com.itheima.mobilesafe.R.attr#desc_on}
+          attribute's value can be found in the {@link #TextView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.itheima.mobilesafe:desc_on
+        */
+        public static final int TextView_desc_on = 1;
+        /**
+          <p>This symbol is the offset where the {@link com.itheima.mobilesafe.R.attr#title2}
+          attribute's value can be found in the {@link #TextView} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name com.itheima.mobilesafe:title2
+        */
+        public static final int TextView_title2 = 0;
         /**  These are the standard attributes that make up a complete theme. 
            <p>Includes the following attributes:</p>
            <table>
