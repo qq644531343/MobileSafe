@@ -26,6 +26,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
@@ -40,7 +41,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +58,8 @@ public class SplashActivity extends Activity {
 	
 	private TextView tv_splash_version;
 	private TextView tv_splash_updateinfo;
+	
+	private SharedPreferences  sp;
 	
 	private String apkurl;
 	private String  version;
@@ -102,12 +104,29 @@ public class SplashActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
 		
+		sp = getSharedPreferences("config", MODE_PRIVATE);
+		
 		tv_splash_version = (TextView)findViewById(R.id.tv_splash_version);
 		tv_splash_version.setText(getString(R.string.appversion) + getVersionName());
 		tv_splash_updateinfo = (TextView)findViewById(R.id.tv_splash_updateinfo);
 		
-		//检查升级
-		checkUpdate();
+		boolean update = sp.getBoolean("update", false);
+		Log.i(TAG, "用户更新设置 ："+update);
+		if (update) {
+			//检查升级
+			checkUpdate();
+		}else {
+			handler.postDelayed(new Runnable() {
+				
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					//进入主页面
+					enterHome();
+				}
+			}, 2000);
+		}
+		
 		AlphaAnimation animation = new AlphaAnimation(0.2f	, 1.0f);
 		animation.setDuration(500);
 		findViewById(R.id.rl_root_splash).startAnimation(animation);
