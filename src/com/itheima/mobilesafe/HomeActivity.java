@@ -1,8 +1,12 @@
 package com.itheima.mobilesafe;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,6 +20,9 @@ public class HomeActivity extends Activity {
 	
 	private GridView list_home;
 	private MyAdapter adapter;
+	
+	private SharedPreferences sp;
+	
 	private static String[] names = {
 		"手机防盗","通讯卫士","软件管理",
 		"进程管理","流量统计","手机杀毒",
@@ -33,6 +40,7 @@ public class HomeActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		
+		sp = getSharedPreferences("config", MODE_PRIVATE);
 		list_home = (GridView)findViewById(R.id.list_home);
 		adapter = new MyAdapter();
 		list_home.setAdapter(adapter);
@@ -48,7 +56,9 @@ public class HomeActivity extends Activity {
 					Intent it = new Intent(HomeActivity.this, SettingActivity.class);
 					startActivity(it);
 					break;
-
+				case 0://手机防盗
+					showLostFindDialog();
+					break;
 				default:
 					break;
 				}
@@ -57,6 +67,47 @@ public class HomeActivity extends Activity {
 		});
 	}
 	
+	protected void showLostFindDialog() {
+		// TODO Auto-generated method stub
+		//判断是否设置过密码
+		 if (isSetupPwd()) {
+			//已经设置密码，弹出输入框
+			 showEnterDialog();
+		} else {
+			//没有设置密码，弹出设置密码对话框
+			showSetupPwdDialog();
+		}
+	}
+	
+	/**
+	 * 输入密码对话框
+	 */
+	private void showEnterDialog() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
+	 * 设置密码对话框
+	 */
+	private void showSetupPwdDialog() {
+		// TODO Auto-generated method stub
+		AlertDialog.Builder builder = new Builder(this);
+		//自定义一个布局文件，
+		View view = View.inflate(HomeActivity.this, R.layout.dialog_setup_password, null);
+		builder.setView(view);
+		builder.show();
+	}
+
+	/**
+	 * 判断是否设置过密码
+	 * @return
+	 */
+	private boolean isSetupPwd(){
+		String pwd = sp.getString("password", null);
+		return ! (TextUtils.isEmpty(pwd));
+	}
+
 	private class MyAdapter extends BaseAdapter {
 
 		@Override
