@@ -83,6 +83,7 @@
         
         <Button 
             android:text="下一步"
+            android:background="@drawable/button"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
              android:layout_width="wrap_content"

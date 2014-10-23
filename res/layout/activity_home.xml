@@ -16,7 +16,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
     
     <com.itheima.mobilesafe.ui.FocusedTextView 
-        android:text="最新的手机卫士，快来下载啊，下载送i6啊!!! 最新的手机卫士，快来下载啊，下载送i6啊!!!"
+        android:text="最新的手机卫士，快来下载啊，下载送iPhone6 plus啊!!! 最新的手机卫士，快来下载啊，下载送iPhone6 plus啊!!!"
         android:textSize="18sp"
         android:ellipsize="marquee" 
         android:singleLine="true"
