@@ -28,6 +28,8 @@
         
         <activity android:name=".HomeActivity"></activity>
         <activity android:name=".SettingActivity"/>
+        <activity android:name=".LostFindActivity"/>
+        <activity android:name=".Setup1Activity"/>
         
     </application>
 

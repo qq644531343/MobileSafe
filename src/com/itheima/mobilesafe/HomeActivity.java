@@ -126,7 +126,8 @@ public class HomeActivity extends Activity {
 				Log.i(TAG, "密码输入正确");
 				dialog.dismiss();
 				//进入防盗页面 
-				
+				Intent it = new Intent(HomeActivity.this, LostFindActivity.class);
+				startActivity(it);
 			}
 		});
 		
@@ -184,6 +185,9 @@ public class HomeActivity extends Activity {
 				editor.commit();
 				dialog.dismiss();
 				Toast.makeText(HomeActivity.this, "密码设置成功", 0).show();
+				//进入防盗页面 
+				Intent it = new Intent(HomeActivity.this, LostFindActivity.class);
+				startActivity(it);
 			}
 		});
 		

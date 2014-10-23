@@ -1243,13 +1243,15 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030016;
         public static final int abc_simple_decor=0x7f030017;
         public static final int activity_home=0x7f030018;
-        public static final int activity_setting=0x7f030019;
-        public static final int activity_splash=0x7f03001a;
-        public static final int dialog_enter_password=0x7f03001b;
-        public static final int dialog_setup_password=0x7f03001c;
-        public static final int list_item_home=0x7f03001d;
-        public static final int setting_item_view=0x7f03001e;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001f;
+        public static final int activity_lost_find=0x7f030019;
+        public static final int activity_setting=0x7f03001a;
+        public static final int activity_setup1=0x7f03001b;
+        public static final int activity_splash=0x7f03001c;
+        public static final int dialog_enter_password=0x7f03001d;
+        public static final int dialog_setup_password=0x7f03001e;
+        public static final int list_item_home=0x7f03001f;
+        public static final int setting_item_view=0x7f030020;
+        public static final int support_simple_spinner_dropdown_item=0x7f030021;
     }
     public static final class menu {
         public static final int splash=0x7f0c0000;
@@ -1529,6 +1531,7 @@ containing a value of this type.
         public static final int Widget_AppCompat_ProgressBar=0x7f0b000a;
         public static final int Widget_AppCompat_ProgressBar_Horizontal=0x7f0b0009;
         public static final int Widget_AppCompat_Spinner_DropDown_ActionBar=0x7f0b0022;
+        public static final int text_content_style=0x7f0b008d;
     }
     public static final class styleable {
         /**  ============================================ 
