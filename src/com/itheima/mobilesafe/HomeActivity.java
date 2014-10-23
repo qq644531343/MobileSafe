@@ -1,5 +1,7 @@
 package com.itheima.mobilesafe;
 
+import com.itheima.mobilesafe.utils.MD5Tool;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -116,7 +118,7 @@ public class HomeActivity extends Activity {
 				//取出密码
 				String password = et_setup_pwd.getText().toString().trim();
 				String savedPassword = sp.getString("password", "");
-				if (TextUtils.isEmpty(password) || ! password.equals(savedPassword)) {
+				if (TextUtils.isEmpty(password) || ! (MD5Tool.getMD5(password)).equals(savedPassword)) {
 					Toast.makeText(HomeActivity.this, "密码不正确", 0).show();
 					return;
 				}
@@ -173,9 +175,9 @@ public class HomeActivity extends Activity {
 					Toast.makeText(HomeActivity.this, "密码不正确", 0).show();
 					return;
 				}
-				 
+				
 				Editor editor = sp.edit();
-				editor.putString("password", password);
+				editor.putString("password", MD5Tool.getMD5(password));
 				editor.commit();
 				dialog.dismiss();
 				Toast.makeText(HomeActivity.this, "密码设置成功", 0).show();
