@@ -126,8 +126,9 @@ public class HomeActivity extends Activity {
 			}
 		});
 		
-		builder.setView(view);
-		dialog = builder.show();
+		dialog = builder.create();
+		dialog.setView(view, 0, 0, 0, 0);
+		dialog.show();
 	}
 	
 	private EditText et_setup_pwd;
@@ -181,8 +182,9 @@ public class HomeActivity extends Activity {
 			}
 		});
 		
-		builder.setView(view);
-		dialog = builder.show();
+		dialog = builder.create();
+		dialog.setView(view, 0, 0, 0, 0);
+		dialog.show();
 	}
 
 	/**
