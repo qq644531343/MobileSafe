@@ -3,6 +3,8 @@ package com.itheima.mobilesafe.utils;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import android.R.integer;
+
 /**
  *  MD5加密工具
  * @author libo
@@ -23,9 +25,10 @@ public class MD5Tool {
 	
 		 StringBuilder hex = new StringBuilder(hash.length * 2);  
 		    for (byte b : hash) {  
-		        if ((b & 0xFF) < 0x10)  
+			 int number = b & 0xFF;
+		        if (number < 0x10)  
 		            hex.append("0");  
-		        hex.append(Integer.toHexString(b & 0xFF));  
+		        hex.append(Integer.toHexString(number));  
 		    }  
 		
 		return hex.toString();

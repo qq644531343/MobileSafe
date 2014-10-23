@@ -94,6 +94,7 @@ public class HomeActivity extends Activity {
 	private void showEnterDialog() {
 		// TODO Auto-generated method stub
 		AlertDialog.Builder builder = new Builder(this);
+		builder.setCancelable(false);
 		//自定义一个布局文件，
 		View view = View.inflate(HomeActivity.this, R.layout.dialog_enter_password, null);
 		et_setup_pwd = (EditText)view.findViewById(R.id.et_setup_pwd);
@@ -125,6 +126,7 @@ public class HomeActivity extends Activity {
 				Log.i(TAG, "密码输入正确");
 				dialog.dismiss();
 				//进入防盗页面 
+				
 			}
 		});
 		
@@ -145,6 +147,7 @@ public class HomeActivity extends Activity {
 	private void showSetupPwdDialog() {
 		// TODO Auto-generated method stub
 		AlertDialog.Builder builder = new Builder(this);
+		builder.setCancelable(false);
 		//自定义一个布局文件，
 		View view = View.inflate(HomeActivity.this, R.layout.dialog_setup_password, null);
 		et_setup_pwd = (EditText)view.findViewById(R.id.et_setup_pwd);
