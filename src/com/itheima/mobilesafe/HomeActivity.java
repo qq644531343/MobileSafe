@@ -5,19 +5,26 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class HomeActivity extends Activity {
 	
+	protected static final String TAG = "HomeActivity";
 	private GridView list_home;
 	private MyAdapter adapter;
 	
@@ -84,8 +91,50 @@ public class HomeActivity extends Activity {
 	 */
 	private void showEnterDialog() {
 		// TODO Auto-generated method stub
+		AlertDialog.Builder builder = new Builder(this);
+		//自定义一个布局文件，
+		View view = View.inflate(HomeActivity.this, R.layout.dialog_enter_password, null);
+		et_setup_pwd = (EditText)view.findViewById(R.id.et_setup_pwd);
+		ok = (Button)view.findViewById(R.id.ok);
+		cancel = (Button)view.findViewById(R.id.cancel);
 		
+		cancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//把对话框取消掉
+				dialog.dismiss();
+			}
+		});
+		
+		ok.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//取出密码
+				String password = et_setup_pwd.getText().toString().trim();
+				String savedPassword = sp.getString("password", "");
+				if (TextUtils.isEmpty(password) || ! password.equals(savedPassword)) {
+					Toast.makeText(HomeActivity.this, "密码不正确", 0).show();
+					return;
+				}
+				Log.i(TAG, "密码输入正确");
+				dialog.dismiss();
+				//进入防盗页面 
+			}
+		});
+		
+		builder.setView(view);
+		dialog = builder.show();
 	}
+	
+	private EditText et_setup_pwd;
+	private EditText et_setup_confirm;
+	private Button ok;
+	private Button cancel;
+	private AlertDialog dialog;
 	
 	/**
 	 * 设置密码对话框
@@ -95,8 +144,45 @@ public class HomeActivity extends Activity {
 		AlertDialog.Builder builder = new Builder(this);
 		//自定义一个布局文件，
 		View view = View.inflate(HomeActivity.this, R.layout.dialog_setup_password, null);
+		et_setup_pwd = (EditText)view.findViewById(R.id.et_setup_pwd);
+		et_setup_confirm = (EditText)view.findViewById(R.id.et__setup_confirm);
+		ok = (Button)view.findViewById(R.id.ok);
+		cancel = (Button)view.findViewById(R.id.cancel);
+		
+		cancel.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//把对话框取消掉
+				dialog.dismiss();
+			}
+		});
+		
+		ok.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				//取出密码
+				String password = et_setup_pwd.getText().toString().trim();
+				String confirm = et_setup_confirm.getText().toString().trim();
+				
+				if (TextUtils.isEmpty(password) || TextUtils.isEmpty(confirm) || !password.equals(confirm))  {
+					Toast.makeText(HomeActivity.this, "密码不正确", 0).show();
+					return;
+				}
+				 
+				Editor editor = sp.edit();
+				editor.putString("password", password);
+				editor.commit();
+				dialog.dismiss();
+				Toast.makeText(HomeActivity.this, "密码设置成功", 0).show();
+			}
+		});
+		
 		builder.setView(view);
-		builder.show();
+		dialog = builder.show();
 	}
 
 	/**
