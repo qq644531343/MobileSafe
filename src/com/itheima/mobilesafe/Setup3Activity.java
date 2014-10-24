@@ -23,6 +23,7 @@ public class Setup3Activity extends Activity {
 		Intent it = new Intent(this,Setup4Activity.class);
 		startActivity(it);
 		finish();
+		overridePendingTransition(R.anim.tran_in, R.anim.tran_out);
 	}
 	
 	public void pre(View view)
@@ -30,5 +31,7 @@ public class Setup3Activity extends Activity {
 		Intent it = new Intent(this,Setup2Activity.class);
 		startActivity(it);
 		finish();
+		overridePendingTransition(R.anim.tran_pre_in, R.anim.tran_pre_out);
+
 	}
 }
