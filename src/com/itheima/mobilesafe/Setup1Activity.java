@@ -3,6 +3,10 @@ package com.itheima.mobilesafe;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
+import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -10,7 +14,10 @@ import android.view.View;
  * @author libo
  *
  */
-public class Setup1Activity extends Activity {
+public class Setup1Activity extends BaseSetupActivity {
+	
+	protected static final String TAG = "Setup1Activity";
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -19,17 +26,13 @@ public class Setup1Activity extends Activity {
 	}
 	
 	@Override
-	protected void onDestroy() {
+	public void showPre() {
 		// TODO Auto-generated method stub
-		super.onDestroy();
+		
 	}
 	
-	/**
-	 * 下一步
-	 * @param view
-	 */
-	public void next(View view)
-	{
+	@Override
+	public void showNext() {
 		Intent it = new Intent(this,Setup2Activity.class);
 		startActivity(it);
 		finish();

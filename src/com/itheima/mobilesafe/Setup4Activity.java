@@ -8,14 +8,15 @@ import android.os.Bundle;
 import android.view.View;
 
 /**
- * 	手机防盗设置向导
+ * 手机防盗设置向导
+ * 
  * @author libo
- *
+ * 
  */
-public class Setup4Activity extends Activity {
-	
+public class Setup4Activity extends BaseSetupActivity {
+
 	private SharedPreferences sp;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -23,25 +24,27 @@ public class Setup4Activity extends Activity {
 		setContentView(R.layout.activity_setup4);
 		sp = getSharedPreferences("config", MODE_PRIVATE);
 	}
-	
-	public void next(View view)
-	{
+
+	@Override
+	public void showNext() {
+		// TODO Auto-generated method stub
 		Editor editor = sp.edit();
 		editor.putBoolean("configed", true);
 		editor.commit();
-		
-		Intent it = new Intent(this,LostFindActivity.class);
+
+		Intent it = new Intent(this, LostFindActivity.class);
 		startActivity(it);
 		finish();
 		overridePendingTransition(R.anim.tran_in, R.anim.tran_out);
 	}
-	
-	public void pre(View view)
-	{
-		Intent it = new Intent(this,Setup3Activity.class);
+
+	@Override
+	public void showPre() {
+		// TODO Auto-generated method stub
+		Intent it = new Intent(this, Setup3Activity.class);
 		startActivity(it);
 		finish();
-		overridePendingTransition(R.anim.tran_pre_in, R.anim.tran_pre_out);
-
+		overridePendingTransition(R.anim.tran_pre_in,
+				R.anim.tran_pre_out);
 	}
 }
