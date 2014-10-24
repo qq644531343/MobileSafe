@@ -35,8 +35,17 @@ public abstract class BaseSetupActivity extends Activity {
 							MotionEvent e2,
 							float velocityX,
 							float velocityY) {
-						// TODO Auto-generated method
-						// stub
+					
+						//屏蔽斜着滑动
+						if (Math.abs(e2.getRawY() - e1.getRawY()) > 100) {
+							return true;
+						}
+						System.out.println("X" + velocityX);
+						//屏蔽在x轴滑动很慢的情况
+						if (Math.abs(velocityX) < 100) {
+							return true;
+						}
+						
 						// 从左往右滑 显示上一页
 						if ((e2.getRawX() - e1
 								.getRawX()) > 200) {
