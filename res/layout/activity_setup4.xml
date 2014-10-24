@@ -15,12 +15,11 @@
         android:textColor="#000000"
         android:textSize="22sp" />
 
-  <CheckBox 
+    <CheckBox
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"
-        android:text="您没有开启防盗"
-      />
+        android:text="您没有开启防盗" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -61,9 +60,9 @@
 
         <Button style="@style/button_pre_style" />
 
-        <Button style="@style/button_next_style" 
-            android:text="设置完成"
-            />
+        <Button
+            style="@style/button_next_style"
+            android:text="设置完成" />
     </RelativeLayout>
 
 </LinearLayout>
