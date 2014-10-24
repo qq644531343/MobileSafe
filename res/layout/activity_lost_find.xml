@@ -74,12 +74,15 @@
         android:background="#44000000" />
 
     <TextView
+        android:onClick="reEnterSetup"
+        android:clickable="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="5dip"
         android:layout_marginTop="8dip"
         android:text="重新进入设置向导"
         android:textColor="#000000"
+        android:background="@drawable/shape_selector"
         android:textSize="20sp" />
 
     <View
