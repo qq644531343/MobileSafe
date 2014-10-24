@@ -1103,21 +1103,37 @@ containing a value of this type.
         public static final int abc_textfield_searchview_right_holo_light=0x7f020056;
         public static final int app=0x7f020057;
         public static final int atools=0x7f020058;
-        public static final int button=0x7f020059;
-        public static final int callmsgsafe=0x7f02005a;
-        public static final int ic_launcher=0x7f02005b;
-        public static final int luncher_bg=0x7f02005c;
-        public static final int netmanager=0x7f02005d;
-        public static final int next=0x7f02005e;
-        public static final int nomal=0x7f02005f;
-        public static final int pressed=0x7f020060;
-        public static final int previous=0x7f020061;
-        public static final int safe=0x7f020062;
-        public static final int settings=0x7f020063;
-        public static final int setup1=0x7f020064;
-        public static final int sysoptimize=0x7f020065;
-        public static final int taskmanager=0x7f020066;
-        public static final int trojan=0x7f020067;
+        public static final int bind=0x7f020059;
+        public static final int btn_green_normal=0x7f02005a;
+        public static final int btn_green_pressed=0x7f02005b;
+        public static final int button=0x7f02005c;
+        public static final int button_bg=0x7f02005d;
+        public static final int button_normal=0x7f02005e;
+        public static final int button_other=0x7f02005f;
+        public static final int button_pressed=0x7f020060;
+        public static final int button_select=0x7f020061;
+        public static final int callmsgsafe=0x7f020062;
+        public static final int comm_btn_bg2_n=0x7f020063;
+        public static final int comm_btn_bg2_s=0x7f020064;
+        public static final int function_greenbutton_normal=0x7f020065;
+        public static final int function_greenbutton_pressed=0x7f020066;
+        public static final int gradient_box=0x7f020067;
+        public static final int gradient_box_pressed=0x7f020068;
+        public static final int ic_launcher=0x7f020069;
+        public static final int lock=0x7f02006a;
+        public static final int luncher_bg=0x7f02006b;
+        public static final int netmanager=0x7f02006c;
+        public static final int next=0x7f02006d;
+        public static final int phone=0x7f02006e;
+        public static final int previous=0x7f02006f;
+        public static final int safe=0x7f020070;
+        public static final int settings=0x7f020071;
+        public static final int setup1=0x7f020072;
+        public static final int shape_selector=0x7f020073;
+        public static final int sysoptimize=0x7f020074;
+        public static final int taskmanager=0x7f020075;
+        public static final int trojan=0x7f020076;
+        public static final int unlock=0x7f020077;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
@@ -1252,12 +1268,15 @@ containing a value of this type.
         public static final int activity_lost_find=0x7f030019;
         public static final int activity_setting=0x7f03001a;
         public static final int activity_setup1=0x7f03001b;
-        public static final int activity_splash=0x7f03001c;
-        public static final int dialog_enter_password=0x7f03001d;
-        public static final int dialog_setup_password=0x7f03001e;
-        public static final int list_item_home=0x7f03001f;
-        public static final int setting_item_view=0x7f030020;
-        public static final int support_simple_spinner_dropdown_item=0x7f030021;
+        public static final int activity_setup2=0x7f03001c;
+        public static final int activity_setup3=0x7f03001d;
+        public static final int activity_setup4=0x7f03001e;
+        public static final int activity_splash=0x7f03001f;
+        public static final int dialog_enter_password=0x7f030020;
+        public static final int dialog_setup_password=0x7f030021;
+        public static final int list_item_home=0x7f030022;
+        public static final int setting_item_view=0x7f030023;
+        public static final int support_simple_spinner_dropdown_item=0x7f030024;
     }
     public static final class menu {
         public static final int splash=0x7f0c0000;
@@ -1312,11 +1331,23 @@ containing a value of this type.
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
+
+
+
+
+
+
     
 
             Theme customizations available in newer API levels can go in
             res/values-vXX/styles.xml, while customizations related to
             backward-compatibility can go here.
+
+
+
+
+
+
         
 
         Base application theme for API 11+. This theme completely replaces
@@ -1537,6 +1568,8 @@ containing a value of this type.
         public static final int Widget_AppCompat_ProgressBar=0x7f0b000a;
         public static final int Widget_AppCompat_ProgressBar_Horizontal=0x7f0b0009;
         public static final int Widget_AppCompat_Spinner_DropDown_ActionBar=0x7f0b0022;
+        public static final int button_next_style=0x7f0b008e;
+        public static final int button_pre_style=0x7f0b008f;
         public static final int text_content_style=0x7f0b008d;
     }
     public static final class styleable {

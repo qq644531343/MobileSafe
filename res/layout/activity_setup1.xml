@@ -10,33 +10,32 @@
         android:layout_height="55dip"
         android:background="#8866ff00"
         android:gravity="center"
-        android:text="1. 欢迎使用手机防盗"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="1.欢迎使用手机防盗"
         android:textColor="#000000"
         android:textSize="22sp" />
 
     <TextView
         style="@style/text_content_style"
-        android:text="1. 您的手机防盗卫士：" />
+        android:text="您的手机防盗卫士：" />
 
     <TextView
         style="@style/text_content_style"
-        android:drawableLeft="@android:drawable/star_on"
+        android:drawableLeft="@android:drawable/star_big_on"
         android:text="sim卡变更报警" />
 
     <TextView
         style="@style/text_content_style"
-        android:drawableLeft="@android:drawable/star_on"
+        android:drawableLeft="@android:drawable/star_big_on"
         android:text="GPS追踪" />
 
     <TextView
         style="@style/text_content_style"
-        android:drawableLeft="@android:drawable/star_on"
+        android:drawableLeft="@android:drawable/star_big_on"
         android:text="远程数据销毁" />
 
     <TextView
         style="@style/text_content_style"
-        android:drawableLeft="@android:drawable/star_on"
+        android:drawableLeft="@android:drawable/star_big_on"
         android:text="远程锁屏" />
 
     <LinearLayout
@@ -64,11 +63,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/presence_invisible" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/presence_invisible" />
     </LinearLayout>
 
     <RelativeLayout
@@ -80,16 +74,9 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:src="@drawable/setup1" />
-        
-        <Button 
-            android:text="下一步"
-            android:background="@drawable/button"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true"
-             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            />
-        
+        <!-- <Button style="@style/button_next_style" /> -->
+
+        <Button style="@style/button_next_style" />
     </RelativeLayout>
 
 </LinearLayout>

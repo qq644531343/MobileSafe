@@ -31,6 +31,7 @@ public class SettingItemView extends RelativeLayout {
 		cb_status = (CheckBox) this.findViewById(R.id.cb_status);
 		tv_title = (TextView) this.findViewById(R.id.tv_title);
 		tv_desc = (TextView) this.findViewById(R.id.tv_desc);
+
 	}
 
 	public SettingItemView(Context context, AttributeSet attrs, int defStyle) {
@@ -61,6 +62,7 @@ public class SettingItemView extends RelativeLayout {
 				"desc_off");
 		     
 		tv_title.setText(title);
+		setChecked(isChecked());
 
 		// System.out.println(attrs.getAttributeValue(0));
 		// System.out.println(attrs.getAttributeValue(1));
