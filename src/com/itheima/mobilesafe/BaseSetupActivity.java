@@ -1,6 +1,7 @@
 package com.itheima.mobilesafe;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -19,12 +20,16 @@ public abstract class BaseSetupActivity extends Activity {
 	protected static final String TAG = "BaseSetupActivity";
 	// 手势识别器
 	private GestureDetector detector;
+	
+	protected SharedPreferences  sp;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 
+		sp = getSharedPreferences("config", MODE_PRIVATE);
+		
 		detector = new GestureDetector(this,
 				new SimpleOnGestureListener() {
 
