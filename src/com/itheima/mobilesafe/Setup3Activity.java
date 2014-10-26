@@ -18,6 +18,15 @@ public class Setup3Activity extends BaseSetupActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup3);
 	}
+	
+	/**
+	 * 选择联系人
+	 * @param view
+	 */
+	public void selectContact(View view) {
+		Intent it = new Intent(Setup3Activity.this,SelectContactActivity.class);
+		startActivityForResult(it, 0);
+	}
 
 	@Override
 	public void showNext() {
