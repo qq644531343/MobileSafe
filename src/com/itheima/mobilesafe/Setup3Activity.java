@@ -1,6 +1,5 @@
 package com.itheima.mobilesafe;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -46,4 +45,6 @@ public class Setup3Activity extends BaseSetupActivity {
 		overridePendingTransition(R.anim.tran_pre_in,
 				R.anim.tran_pre_out);
 	}
+	
+	
 }
