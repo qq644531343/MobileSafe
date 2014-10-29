@@ -16,6 +16,7 @@
         android:textSize="22sp" />
 
     <CheckBox
+        android:id="@+id/cb_protecting"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dip"

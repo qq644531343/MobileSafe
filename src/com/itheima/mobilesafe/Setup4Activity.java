@@ -1,11 +1,11 @@
 package com.itheima.mobilesafe;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
-import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 /**
  * 手机防盗设置向导
@@ -15,14 +15,40 @@ import android.view.View;
  */
 public class Setup4Activity extends BaseSetupActivity {
 
-	private SharedPreferences sp;
-
+	private CheckBox cb_protecting;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_setup4);
-		sp = getSharedPreferences("config", MODE_PRIVATE);
+	
+		cb_protecting = (CheckBox)findViewById(R.id.cb_protecting);
+		boolean isChecked = sp.getBoolean("protecting", false);
+		cb_protecting.setChecked(isChecked);
+		setCheckBoxStatus(isChecked);
+		cb_protecting.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				setCheckBoxStatus(isChecked);
+			}
+		});
+		
+	}
+	
+	private void setCheckBoxStatus(boolean isChecked)
+	{
+		if (isChecked) {
+			cb_protecting.setText("您已经开启防盗");
+		}else {
+			cb_protecting.setText("您没有开启防盗");
+		}
+		//保存选择的状态
+		Editor editor = sp.edit();
+		editor.putBoolean("protecting", isChecked);
+		editor.commit();	
 	}
 
 	@Override

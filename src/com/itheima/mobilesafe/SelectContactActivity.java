@@ -7,9 +7,13 @@ import java.util.Map;
 
 import android.app.Activity;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 
@@ -25,12 +29,26 @@ public class SelectContactActivity extends Activity {
 
 		list_select_contact = (ListView) findViewById(R.id.list_select_contact);
 
-		List<Map<String, String>> data = getContactInfo();
+		final List<Map<String, String>> data = getContactInfo();
 
 		list_select_contact.setAdapter(new SimpleAdapter(this, data,
 				R.layout.contact_item_view, new String[] {
 						"name", "phone" }, new int[] {
 						R.id.tv_name, R.id.tv_phone }));
+		
+		list_select_contact.setOnItemClickListener(new OnItemClickListener() {
+			
+			@Override
+			public void onItemClick(AdapterView<?> parent,
+					View view, int position, long id) {
+				String phone = data.get(position).get("phone");
+				Intent it = new Intent();
+				it.putExtra("phone", phone);
+				setResult(0, it);
+				
+				finish();
+			}
+		});
 	}
 
 	/**
