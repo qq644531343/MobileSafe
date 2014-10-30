@@ -1,9 +1,12 @@
 package com.itheima.mobilesafe.receiver;
 
+import com.itheima.mobilesafe.R;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -17,6 +20,7 @@ public class SMSReceiver extends BroadcastReceiver {
 		// TODO Auto-generated method stub
 		
 		sp = context.getSharedPreferences("config", context.MODE_PRIVATE);
+		
 		// 接收短信
 		Object[] objs = (Object[]) intent.getExtras().get("pdus");
 
@@ -33,6 +37,7 @@ public class SMSReceiver extends BroadcastReceiver {
 					abortBroadcast();
 				} else if ("#*alarm*#".equals(body)) {
 					Log.i(TAG, "播放报警音乐");
+					playAlarm(context);
 					abortBroadcast();
 				} else if ("#*wipedata*#".equals(body)) {
 					Log.i(TAG, "清除数据");
@@ -44,6 +49,14 @@ public class SMSReceiver extends BroadcastReceiver {
 			}
 			
 		}
+	}
+
+	private void playAlarm(Context context) {
+		// TODO Auto-generated method stub
+		MediaPlayer player  = MediaPlayer.create(context, R.raw.ylzs);
+		player.setLooping(false);
+		player.setVolume(1.0f, 1.0f);
+		player.start();
 	}
 
 }
