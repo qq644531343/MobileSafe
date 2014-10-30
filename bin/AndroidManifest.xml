@@ -53,6 +53,8 @@
             </intent-filter>
         </receiver>
         
+        <service android:name=".service.GPSService"></service>
+        
     </application>
 
 </manifest>
