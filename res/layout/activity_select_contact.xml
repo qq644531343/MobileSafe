@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -13,9 +14,9 @@
         android:gravity="center"
         android:text="选择联系人"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-   
+        
     <ListView
-        android:id="@+id/list_select_contact"
+        android:id="@+id/list_select_contact" 
         android:layout_marginTop="15dip"
         android:verticalSpacing="10dip"
         android:layout_width="match_parent"

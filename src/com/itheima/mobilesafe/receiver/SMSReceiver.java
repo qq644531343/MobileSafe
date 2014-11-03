@@ -1,13 +1,16 @@
 package com.itheima.mobilesafe.receiver;
 
 import com.itheima.mobilesafe.R;
+import com.itheima.mobilesafe.service.GPSService;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.text.TextUtils;
 import android.util.Log;
 
 public class SMSReceiver extends BroadcastReceiver {
@@ -34,6 +37,17 @@ public class SMSReceiver extends BroadcastReceiver {
 			if (sender.contains(safenumber)) {
 				if ("#*location*#".equals(body)) {
 					Log.i(TAG, "收到定位短信");
+					Intent it = new Intent(context,GPSService.class);
+					context.startService(it);
+					SharedPreferences spPreferences = context.getSharedPreferences("config", context.MODE_PRIVATE);
+					String lastlocation = spPreferences.getString("lastlocation", null);
+					if (TextUtils.isEmpty(lastlocation)) {
+						//位置没有得到
+						SmsManager.getDefault().sendTextMessage(sender, null, "getting location", null, null);
+					}else {
+						SmsManager.getDefault().sendTextMessage(sender, null, lastlocation, null, null);
+					}
+					
 					abortBroadcast();
 				} else if ("#*alarm*#".equals(body)) {
 					Log.i(TAG, "播放报警音乐");
