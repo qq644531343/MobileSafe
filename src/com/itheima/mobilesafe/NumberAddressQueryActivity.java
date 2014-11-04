@@ -4,7 +4,9 @@ import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,6 +32,29 @@ public class NumberAddressQueryActivity extends Activity {
 		
 		et_phone = (EditText)findViewById(R.id.et_phone);
 		result = (TextView)findViewById(R.id.result);
+		
+		et_phone.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
+				if (s!=null  && s.length() >=3) {
+					String address = NumberAddressQueryUtils.querNumber(s.toString());
+					result.setText(address);
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+			}
+		});
 	}
 	
 	/**
