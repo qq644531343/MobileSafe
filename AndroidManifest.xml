@@ -42,6 +42,8 @@
         <activity android:name=".Setup3Activity" />
         <activity android:name=".Setup4Activity" />
         <activity android:name=".SelectContactActivity" />
+        <activity android:name=".AtoolsActivity"/>
+        <activity android:name=".NumberAddressQueryActivity"/>
 
         <receiver android:name=".receiver.BootCompleteReceiver" >
             <intent-filter>
