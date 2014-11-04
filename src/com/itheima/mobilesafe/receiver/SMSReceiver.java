@@ -40,10 +40,11 @@ public class SMSReceiver extends BroadcastReceiver {
 					Intent it = new Intent(context,GPSService.class);
 					context.startService(it);
 					SharedPreferences spPreferences = context.getSharedPreferences("config", context.MODE_PRIVATE);
-					String lastlocation = spPreferences.getString("lastlocation", null);
+					String lastlocation = spPreferences.getString("lastlocation", "");
+					Log.i(TAG, lastlocation);
 					if (TextUtils.isEmpty(lastlocation)) {
 						//位置没有得到
-						SmsManager.getDefault().sendTextMessage(sender, null, "getting location", null, null);
+						SmsManager.getDefault().sendTextMessage(sender, null, "geting loaction.....", null, null);
 					}else {
 						SmsManager.getDefault().sendTextMessage(sender, null, lastlocation, null, null);
 					}

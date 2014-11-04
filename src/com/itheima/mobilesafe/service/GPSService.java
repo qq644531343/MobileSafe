@@ -54,13 +54,10 @@ public class GPSService extends Service {
 		public void onLocationChanged(Location location) {
 			// TODO Auto-generated method stub
 
-			Log.i("",
-					"long:" + location.getLongitude() + "  lat:"
-							+ location.getLatitude());
 			
-			String longitude = "经度：" + location.getLongitude();
-			String latitude = "\t维度：" + location.getLatitude();
-			String accuracy = "\t精确度：" + location.getAccuracy();
+			String longitude = "j:" +  location.getLongitude();
+			String latitude =  "w:" + location.getLatitude();
+			String accuracy ="a: " +  location.getAccuracy();
 			
 			//标准gps转火星坐标
 			InputStream is;
@@ -68,8 +65,8 @@ public class GPSService extends Service {
 				is = getAssets().open("axisoffset.dat");
 				ModifyOffset offset = ModifyOffset.getInstance(is);
 				PointDouble pointDouble = offset.s2c(new PointDouble(location.getLongitude(), location.getLatitude()));
-				longitude = "j: " +offset.X + "\n";
-				latitude = "w: " + offset.Y + "\n";
+				longitude = "j: " +pointDouble.x + "\n";
+				latitude = "w: " + pointDouble.y + "\n";
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -77,7 +74,7 @@ public class GPSService extends Service {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+			Log.i("locationService", "location:" + longitude + "  " + latitude + " acc " + accuracy );
 			SharedPreferences sp = getSharedPreferences("config", MODE_PRIVATE);
 			Editor editor = sp.edit();
 			editor.putString("lastlocation", longitude + latitude +accuracy);
