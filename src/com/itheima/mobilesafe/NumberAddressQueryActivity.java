@@ -9,6 +9,8 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,9 @@ public class NumberAddressQueryActivity extends Activity {
 					String address = NumberAddressQueryUtils.querNumber(s.toString());
 					result.setText(address);
 				}
+				if (s==null || s.length() == 0) {
+					result.setText("显示结果");
+				}
 			}
 			
 			@Override
@@ -66,6 +71,8 @@ public class NumberAddressQueryActivity extends Activity {
 		String phone = et_phone.getText().toString().trim();
 		if (TextUtils.isEmpty(phone)) {
 			Toast.makeText(this, "号码为空", 0).show();
+			Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
+			et_phone.startAnimation(shake);
 			return;
 		}else {
 			//查询数据库
