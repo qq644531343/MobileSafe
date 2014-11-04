@@ -4,6 +4,7 @@ import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -26,6 +27,8 @@ public class NumberAddressQueryActivity extends Activity {
 	private EditText et_phone;
 	private TextView result;
 	
+	private Vibrator vibrator;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
@@ -34,6 +37,8 @@ public class NumberAddressQueryActivity extends Activity {
 		
 		et_phone = (EditText)findViewById(R.id.et_phone);
 		result = (TextView)findViewById(R.id.result);
+		
+		vibrator = (Vibrator)getSystemService(VIBRATOR_SERVICE);
 		
 		et_phone.addTextChangedListener(new TextWatcher() {
 			
@@ -71,6 +76,7 @@ public class NumberAddressQueryActivity extends Activity {
 		String phone = et_phone.getText().toString().trim();
 		if (TextUtils.isEmpty(phone)) {
 			Toast.makeText(this, "号码为空", 0).show();
+			//抖动动画
 			Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 			et_phone.startAnimation(shake);
 			return;
