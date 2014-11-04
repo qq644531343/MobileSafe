@@ -1,5 +1,7 @@
 package com.itheima.mobilesafe;
 
+import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -43,6 +45,8 @@ public class NumberAddressQueryActivity extends Activity {
 		}else {
 			//查询数据库
 			Log.i(TAG, "要查询的号码:" + phone);
+			String address = NumberAddressQueryUtils.querNumber(phone);
+			result.setText(address);
 		}
 	}
 }

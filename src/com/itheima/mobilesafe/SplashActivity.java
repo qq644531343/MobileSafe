@@ -9,6 +9,7 @@
 package com.itheima.mobilesafe;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -22,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.R.anim;
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -110,6 +112,9 @@ public class SplashActivity extends Activity {
 		tv_splash_version.setText(getString(R.string.appversion) + getVersionName());
 		tv_splash_updateinfo = (TextView)findViewById(R.id.tv_splash_updateinfo);
 		
+		//拷贝归属地数据库
+		copyDB();
+		
 		boolean update = sp.getBoolean("update", false);
 		Log.i(TAG, "用户更新设置 ："+update);
 		if (update) {
@@ -133,6 +138,37 @@ public class SplashActivity extends Activity {
 		
 	}
 	
+	private void copyDB() {
+		
+		//只需拷贝一次
+		
+		try {
+			
+			//  data/data/pkg/files = getFilesDir
+			File file = new File(getFilesDir(), "address.db");
+			if (file.exists() && file.length()>0) {
+				//已拷贝
+				Log.i(TAG, "归属地数据库已存在" + file.getAbsolutePath());
+			}else {
+				InputStream is = getAssets().open("address.db");
+				
+				FileOutputStream fos = new FileOutputStream(file);
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while((len = is.read(buffer)) != -1)
+				{
+					fos.write(buffer, 0, len);
+				}
+				is.close();
+				fos.close();
+			}
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * 	弹出升级对话框
 	 */
