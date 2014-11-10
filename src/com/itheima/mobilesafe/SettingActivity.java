@@ -11,6 +11,7 @@ import android.view.ViewDebug.FlagToString;
 
 import com.itheima.mobilesafe.service.AddressService;
 import com.itheima.mobilesafe.ui.SettingItemView;
+import com.itheima.mobilesafe.utils.ServiceUtils;
 
 public class SettingActivity extends Activity {
 
@@ -59,6 +60,8 @@ public class SettingActivity extends Activity {
 		//设置是否开启来电归属地显示
 		siv_show_address = (SettingItemView)findViewById(R.id.siv_show_address);
 		showAddressIntent = new Intent(this, AddressService.class);
+		boolean isRunning = ServiceUtils.isServiceRunning(this, "com.itheima.mobilesafe.service.AddressService");
+		siv_show_address.setChecked(isRunning);
 		siv_show_address.setOnClickListener(new OnClickListener() {
 			
 			@Override

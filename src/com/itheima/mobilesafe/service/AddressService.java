@@ -3,7 +3,10 @@ package com.itheima.mobilesafe.service;
 import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
@@ -14,6 +17,8 @@ public class AddressService extends Service {
 	//监听来电
 	private TelephonyManager tm;
 	private MyPhoneStateListener listener;
+	
+	private OutCallReceiver receiver;
 	
 	private class MyPhoneStateListener extends PhoneStateListener
 	{
@@ -36,6 +41,20 @@ public class AddressService extends Service {
 		
 	}
 
+	//打电话广播
+	private class OutCallReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// TODO Auto-generated method stub
+			//得到要打出去的电话号码
+			String phone  = getResultData();
+			String address = NumberAddressQueryUtils.querNumber(phone);
+			Toast.makeText(context, address, 1).show();
+		}
+
+	}
+	
 	@Override
 	public IBinder onBind(Intent intent) {
 
@@ -46,6 +65,12 @@ public class AddressService extends Service {
 	public void onCreate() {
 		// TODO Auto-generated method stub
 		super.onCreate();
+		
+		//注册打电话广播接收者
+		receiver = new OutCallReceiver();
+		IntentFilter filter = new IntentFilter("android.intent.action.NEW_OUTGOING_CALL");
+		registerReceiver(receiver, filter);
+		
 		tm = (TelephonyManager)getSystemService(TELEPHONY_SERVICE);
 		
 		//监听来电
@@ -58,9 +83,14 @@ public class AddressService extends Service {
 	public void onDestroy() {
 		// TODO Auto-generated method stub
 		super.onDestroy();
+		//取消打电话广播接收者
+		unregisterReceiver(receiver);
+		receiver = null;
+		
 		//取消监听
 		tm.listen(listener, PhoneStateListener.LISTEN_NONE);	
 		listener = null;
+		
 	}
 
 }
