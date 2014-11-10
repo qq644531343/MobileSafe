@@ -16,15 +16,21 @@
         android:textSize="22sp" />
 
     <com.itheima.mobilesafe.ui.SettingItemView
-        itheima:title2="设置自动更新"
-        itheima:desc_on="设置自动更新已经开启"
-        itheima:desc_off="设置自动更新已经关闭"
         android:id="@+id/siv_update"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        itheima:desc_off="设置自动更新已经关闭"
+        itheima:desc_on="设置自动更新已经开启"
+        itheima:title2="设置自动更新" >
     </com.itheima.mobilesafe.ui.SettingItemView>
-    
-    
-   
+
+    <com.itheima.mobilesafe.ui.SettingItemView
+        android:id="@+id/siv_show_address"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        itheima:desc_off="号码归属地显示已经关闭"
+        itheima:desc_on="号码归属地显示已经开启"
+        itheima:title2="号码归属地显示" >
+    </com.itheima.mobilesafe.ui.SettingItemView>
 
 </LinearLayout>

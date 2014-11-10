@@ -79,6 +79,12 @@ public class NumberAddressQueryActivity extends Activity {
 			//抖动动画
 			Animation shake = AnimationUtils.loadAnimation(this, R.anim.shake);
 			et_phone.startAnimation(shake);
+			
+			//震动
+//			vibrator.vibrate(2000);
+			long[] patterm = {200,200,300,300,1000,2000};
+			vibrator.vibrate(patterm, 0); //0循环 -1不重复 
+			
 			return;
 		}else {
 			//查询数据库

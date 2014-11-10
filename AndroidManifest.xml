@@ -46,6 +46,7 @@
         <activity android:name=".AtoolsActivity"/>
         <activity android:name=".NumberAddressQueryActivity"/>
 
+
         <receiver android:name=".receiver.BootCompleteReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -57,8 +58,10 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.GPSService" >
-        </service>
+        <service android:name=".service.GPSService" />
+        <service android:name=".service.AddressService"/>
+        
+        
     </application>
 
 </manifest>
