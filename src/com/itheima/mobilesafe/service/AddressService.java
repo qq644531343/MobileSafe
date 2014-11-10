@@ -7,9 +7,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddressService extends Service {
@@ -19,6 +22,9 @@ public class AddressService extends Service {
 	private MyPhoneStateListener listener;
 	
 	private OutCallReceiver receiver;
+	
+	//窗体管理者
+	private WindowManager wm;
 	
 	private class MyPhoneStateListener extends PhoneStateListener
 	{
@@ -31,7 +37,8 @@ public class AddressService extends Service {
 			case TelephonyManager.CALL_STATE_RINGING://铃声想起/来电
 				//根据得到的电话号码查询归属地,并toast
 				String address = NumberAddressQueryUtils.querNumber(incomingNumber);
-				Toast.makeText(getApplicationContext(), address, 1).show();
+//				Toast.makeText(getApplicationContext(), address, 1).show();
+				myToast(address);
 				break;
 
 			default:
@@ -50,10 +57,22 @@ public class AddressService extends Service {
 			//得到要打出去的电话号码
 			String phone  = getResultData();
 			String address = NumberAddressQueryUtils.querNumber(phone);
-			Toast.makeText(context, address, 1).show();
+//			Toast.makeText(context, address, 1).show();
+			myToast(address);
 		}
 
 	}
+	
+	public void myToast(String address) {
+		// TODO Auto-generated method stub
+		TextView textView = new TextView(getApplicationContext());
+		textView.setText(address);
+		textView.setTextSize(22);
+		textView.setTextColor(Color.RED);
+		
+		
+	}
+
 	
 	@Override
 	public IBinder onBind(Intent intent) {
