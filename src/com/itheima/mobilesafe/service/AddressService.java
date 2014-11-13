@@ -1,29 +1,29 @@
 package com.itheima.mobilesafe.service;
 
-import com.itheima.mobilesafe.R;
-import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
-
-import android.R.integer;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.webkit.WebView.FindListener;
-import android.widget.Space;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.itheima.mobilesafe.R;
+import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
 
 public class AddressService extends Service {
 
+	protected static final String TAG = "AddressService";
 	// 监听来电
 	private TelephonyManager tm;
 	private MyPhoneStateListener listener;
@@ -102,10 +102,40 @@ public class AddressService extends Service {
 				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 		params.format = PixelFormat.TRANSLUCENT;
+		params.gravity = Gravity.TOP + Gravity.LEFT;
+		params.x = 100;
+		params.y = 100;
 		params.type = WindowManager.LayoutParams.TYPE_TOAST;
 		params.setTitle("Toast");
-		System.out.println(view);
+
 		wm.addView(view, params);
+		
+		view.setOnTouchListener(new OnTouchListener() {
+			
+			int startX;
+			int startY;
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				
+				switch (event.getAction()) {
+				case MotionEvent.ACTION_DOWN://手指按下
+					startX = (int)event.getRawX();
+					startY = (int)event.getRawY();
+					Log.i(TAG, "startX: " + startX + "  startY: " + startY);
+					break;
+				case MotionEvent.ACTION_MOVE://移动
+					
+					break;
+				case MotionEvent.ACTION_UP://离开
+
+					break;
+				default:
+					break;
+				}
+				
+				return true;//事件处理完毕，不让其他控件接收
+			}
+		});
 	}
 
 	@Override
