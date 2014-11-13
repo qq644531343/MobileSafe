@@ -3,11 +3,13 @@ package com.itheima.mobilesafe.service;
 import com.itheima.mobilesafe.R;
 import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
 
+import android.R.integer;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
@@ -16,6 +18,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.WebView.FindListener;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,6 +33,8 @@ public class AddressService extends Service {
 	// 窗体管理者
 	private WindowManager wm;
 	private View view ;
+	
+	private SharedPreferences sp;
 
 	private class MyPhoneStateListener extends PhoneStateListener {
 
@@ -79,11 +84,17 @@ public class AddressService extends Service {
 		// TODO Auto-generated method stub
 
 		view = View.inflate(this, R.layout.address_show, null);
-		view.setBackgroundResource(R.drawable.call_locate_gray);
+		
 		TextView textView = (TextView) view
 				.findViewById(R.id.tv_address);
 		textView.setText(address);
-
+		
+		//{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+		int which = sp.getInt("which", 0);
+		int[] ids = {R.drawable.call_locate_white, R.drawable.call_locate_orange,
+				R.drawable.call_locate_blue, R.drawable.call_locate_gray,R.drawable.call_locate_green};
+		view.setBackgroundResource(ids[which]);
+		
 		final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
@@ -121,7 +132,8 @@ public class AddressService extends Service {
 		tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
 		
 		wm = (WindowManager)getSystemService(WINDOW_SERVICE);
-
+		
+		sp = getSharedPreferences("config", MODE_PRIVATE);
 	}
 
 	@Override
