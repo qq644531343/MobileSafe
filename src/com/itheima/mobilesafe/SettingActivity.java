@@ -1,6 +1,10 @@
 package com.itheima.mobilesafe;
 
+import android.R.integer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
@@ -10,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewDebug.FlagToString;
 
 import com.itheima.mobilesafe.service.AddressService;
+import com.itheima.mobilesafe.ui.SettingClickView;
 import com.itheima.mobilesafe.ui.SettingItemView;
 import com.itheima.mobilesafe.utils.ServiceUtils;
 
@@ -21,6 +26,8 @@ public class SettingActivity extends Activity {
 	private SettingItemView siv_show_address;
 	private Intent showAddressIntent;
 	
+	//设置归属地显示背景
+	private SettingClickView scv_changebg;
 	private SharedPreferences sp;
 
 	@Override
@@ -76,6 +83,42 @@ public class SettingActivity extends Activity {
 					startService(showAddressIntent);
 					siv_show_address.setChecked(true);
 				}
+				
+			}
+		});
+		
+		//归属地背景
+		scv_changebg = (SettingClickView)findViewById(R.id.scv_changebg);
+		final String[] items = {"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+		int which = sp.getInt("which", 0);
+		scv_changebg.setDesc(items[which]);
+		scv_changebg.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				
+				//弹出对话框
+				AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
+				builder.setTitle("归属地提示框风格");
+				int dd = sp.getInt("which", 0);
+				scv_changebg.setDesc(items[dd]);
+				builder.setSingleChoiceItems(items, dd , new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// TODO Auto-generated method stub
+						//保存选择的样式
+						Editor editor = sp.edit();
+						editor.putInt("which", which);
+						editor.commit();
+						scv_changebg.setDesc(items[which]);
+						
+						//取消对话框
+						dialog.dismiss();
+					}
+				});
+				builder.setNegativeButton("cancel", null);
+				builder.show();
 				
 			}
 		});

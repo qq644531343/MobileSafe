@@ -18,8 +18,7 @@
 	<uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS"/>
     
     <uses-sdk
-        android:minSdkVersion="9"
-        android:targetSdkVersion="18" />
+        android:minSdkVersion="9"/>
 
     <application
         android:allowBackup="true"

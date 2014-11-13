@@ -33,4 +33,11 @@
         itheima:title2="号码归属地显示" >
     </com.itheima.mobilesafe.ui.SettingItemView>
 
+    <com.itheima.mobilesafe.ui.SettingClickView
+        android:id="@+id/scv_changebg"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        itheima:title2="归属地提示框风格" >
+    </com.itheima.mobilesafe.ui.SettingClickView>
+
 </LinearLayout>
