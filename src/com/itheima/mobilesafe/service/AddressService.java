@@ -1,11 +1,13 @@
 package com.itheima.mobilesafe.service;
 
+import android.R.integer;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
 import android.telephony.PhoneStateListener;
@@ -79,6 +81,8 @@ public class AddressService extends Service {
 		}
 
 	}
+	
+	private  WindowManager.LayoutParams params;
 
 	public void myToast(String address) {
 		// TODO Auto-generated method stub
@@ -95,20 +99,20 @@ public class AddressService extends Service {
 				R.drawable.call_locate_blue, R.drawable.call_locate_gray,R.drawable.call_locate_green};
 		view.setBackgroundResource(ids[which]);
 		
-		final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+	    params = new WindowManager.LayoutParams();
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-				| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
 				| WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
 		params.format = PixelFormat.TRANSLUCENT;
 		params.gravity = Gravity.TOP + Gravity.LEFT;
-		params.x = 100;
-		params.y = 100;
-		params.type = WindowManager.LayoutParams.TYPE_TOAST;
+		params.x = sp.getInt("lastx", 100);
+		params.y = sp.getInt("lasty", 100);
+		params.type = WindowManager.LayoutParams.TYPE_PRIORITY_PHONE;
 		params.setTitle("Toast");
 
 		wm.addView(view, params);
+		
 		
 		view.setOnTouchListener(new OnTouchListener() {
 			
@@ -124,16 +128,55 @@ public class AddressService extends Service {
 					Log.i(TAG, "startX: " + startX + "  startY: " + startY);
 					break;
 				case MotionEvent.ACTION_MOVE://移动
+					int newX = (int)event.getRawX();
+					int newY = (int)event.getRawY();
+					
+					int dx = newX - startX;
+					int dy = newY - startY;
+					
+					Log.i(TAG, "newX: " + newX + "  newY: " + newY);
+					Log.i(TAG, "dX: " + dx + "  dy: " + dy);
+
+					params.x += dx;
+					params.y += dy;
+					
+					//边界问题
+					if (params.x < 0) {
+						params.x = 0;
+					}
+					if (params.y < 0) {
+						params.y = 0;
+					}
+					if (params.x > wm.getDefaultDisplay().getWidth() - view.getWidth()) {
+						params.x = wm.getDefaultDisplay().getWidth() - view.getWidth();
+					}
+					if (params.y > wm.getDefaultDisplay().getHeight() - view.getHeight()) {
+						params.y = wm.getDefaultDisplay().getHeight() - view.getHeight();
+					}
+					
+					wm.updateViewLayout(view, params);
+					
+					startX = newX;
+					startY = newY;
 					
 					break;
 				case MotionEvent.ACTION_UP://离开
-
+					int endX = (int)event.getRawX();
+					int endY = (int)event.getRawY();
+					Log.i(TAG, "endX: " + endX + "  endY: " + endY);
+					
+					//记录toast距离界面左上的距离
+					Editor eidt = sp.edit();
+					eidt.putInt("lastx", params.x);
+					eidt.putInt("lasty", params.y);
+					eidt.commit();
+					
 					break;
 				default:
 					break;
 				}
 				
-				return true;//事件处理完毕，不让其他控件接收
+				return false;//true事件处理完毕，不让其他控件接收
 			}
 		});
 	}
