@@ -1,6 +1,5 @@
 package com.itheima.mobilesafe.service;
 
-import android.R.integer;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,15 +9,19 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.PixelFormat;
 import android.os.IBinder;
+import android.os.SystemClock;
+import android.os.StrictMode.VmPolicy;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itheima.mobilesafe.R;
 import com.itheima.mobilesafe.db.dao.NumberAddressQueryUtils;
@@ -34,8 +37,8 @@ public class AddressService extends Service {
 
 	// 窗体管理者
 	private WindowManager wm;
-	private View view ;
-	
+	private View view;
+
 	private SharedPreferences sp;
 
 	private class MyPhoneStateListener extends PhoneStateListener {
@@ -47,14 +50,13 @@ public class AddressService extends Service {
 			switch (state) {
 			case TelephonyManager.CALL_STATE_RINGING:// 铃声想起/来电
 				// 根据得到的电话号码查询归属地,并toast
-				String address = NumberAddressQueryUtils
-						.querNumber(incomingNumber);
+				String address = NumberAddressQueryUtils.querNumber(incomingNumber);
 				// Toast.makeText(getApplicationContext(),
 				// address, 1).show();
 				myToast(address);
 				break;
-			case TelephonyManager.CALL_STATE_IDLE://空闲状态/挂掉电话
-				if (view!=null) {
+			case TelephonyManager.CALL_STATE_IDLE:// 空闲状态/挂掉电话
+				if (view != null) {
 					wm.removeView(view);
 					view = null;
 				}
@@ -74,32 +76,30 @@ public class AddressService extends Service {
 			// TODO Auto-generated method stub
 			// 得到要打出去的电话号码
 			String phone = getResultData();
-			String address = NumberAddressQueryUtils
-					.querNumber(phone);
-//			Toast.makeText(context, address, 1).show();
+			String address = NumberAddressQueryUtils.querNumber(phone);
+			// Toast.makeText(context, address, 1).show();
 			myToast(address);
 		}
 
 	}
-	
-	private  WindowManager.LayoutParams params;
+
+	private WindowManager.LayoutParams params;
 
 	public void myToast(String address) {
 		// TODO Auto-generated method stub
 
 		view = View.inflate(this, R.layout.address_show, null);
-		
-		TextView textView = (TextView) view
-				.findViewById(R.id.tv_address);
+
+		TextView textView = (TextView) view.findViewById(R.id.tv_address);
 		textView.setText(address);
-		
-		//{"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+
+		// {"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
 		int which = sp.getInt("which", 0);
-		int[] ids = {R.drawable.call_locate_white, R.drawable.call_locate_orange,
-				R.drawable.call_locate_blue, R.drawable.call_locate_gray,R.drawable.call_locate_green};
+		int[] ids = { R.drawable.call_locate_white, R.drawable.call_locate_orange, R.drawable.call_locate_blue,
+				R.drawable.call_locate_gray, R.drawable.call_locate_green };
 		view.setBackgroundResource(ids[which]);
-		
-	    params = new WindowManager.LayoutParams();
+
+		params = new WindowManager.LayoutParams();
 		params.height = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.width = WindowManager.LayoutParams.WRAP_CONTENT;
 		params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
@@ -112,35 +112,58 @@ public class AddressService extends Service {
 		params.setTitle("Toast");
 
 		wm.addView(view, params);
-		
-		
-		view.setOnTouchListener(new OnTouchListener() {
+
+		view.setOnClickListener(new OnClickListener() {
 			
+			long[] mHits = new long[2];
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
+				mHits[mHits.length - 1] = SystemClock.uptimeMillis();
+				if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
+					//双击，控件居中
+					params.x = (wm.getDefaultDisplay().getWidth() - view.getWidth()) /2;
+					params.y = (wm.getDefaultDisplay().getHeight() - view.getHeight()) / 2;
+					wm.updateViewLayout(view, params);
+					
+					// 记录toast距离界面左上的距离
+					Editor eidt = sp.edit();
+					eidt.putInt("lastx", params.x);
+					eidt.putInt("lasty", params.y);
+					eidt.commit();
+				}
+			}
+		});
+
+		view.setOnTouchListener(new OnTouchListener() {
+
 			int startX;
 			int startY;
+
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				
+
 				switch (event.getAction()) {
-				case MotionEvent.ACTION_DOWN://手指按下
-					startX = (int)event.getRawX();
-					startY = (int)event.getRawY();
+				case MotionEvent.ACTION_DOWN:// 手指按下
+					startX = (int) event.getRawX();
+					startY = (int) event.getRawY();
 					Log.i(TAG, "startX: " + startX + "  startY: " + startY);
 					break;
-				case MotionEvent.ACTION_MOVE://移动
-					int newX = (int)event.getRawX();
-					int newY = (int)event.getRawY();
-					
+				case MotionEvent.ACTION_MOVE:// 移动
+					int newX = (int) event.getRawX();
+					int newY = (int) event.getRawY();
+
 					int dx = newX - startX;
 					int dy = newY - startY;
-					
+
 					Log.i(TAG, "newX: " + newX + "  newY: " + newY);
 					Log.i(TAG, "dX: " + dx + "  dy: " + dy);
 
 					params.x += dx;
 					params.y += dy;
-					
-					//边界问题
+
+					// 边界问题
 					if (params.x < 0) {
 						params.x = 0;
 					}
@@ -153,30 +176,30 @@ public class AddressService extends Service {
 					if (params.y > wm.getDefaultDisplay().getHeight() - view.getHeight()) {
 						params.y = wm.getDefaultDisplay().getHeight() - view.getHeight();
 					}
-					
+
 					wm.updateViewLayout(view, params);
-					
+
 					startX = newX;
 					startY = newY;
-					
+
 					break;
-				case MotionEvent.ACTION_UP://离开
-					int endX = (int)event.getRawX();
-					int endY = (int)event.getRawY();
+				case MotionEvent.ACTION_UP:// 离开
+					int endX = (int) event.getRawX();
+					int endY = (int) event.getRawY();
 					Log.i(TAG, "endX: " + endX + "  endY: " + endY);
-					
-					//记录toast距离界面左上的距离
+
+					// 记录toast距离界面左上的距离
 					Editor eidt = sp.edit();
 					eidt.putInt("lastx", params.x);
 					eidt.putInt("lasty", params.y);
 					eidt.commit();
-					
+
 					break;
 				default:
 					break;
 				}
-				
-				return false;//true事件处理完毕，不让其他控件接收
+
+				return false;// true事件处理完毕，不让其他控件接收
 			}
 		});
 	}
@@ -194,8 +217,7 @@ public class AddressService extends Service {
 
 		// 注册打电话广播接收者
 		receiver = new OutCallReceiver();
-		IntentFilter filter = new IntentFilter(
-				"android.intent.action.NEW_OUTGOING_CALL");
+		IntentFilter filter = new IntentFilter("android.intent.action.NEW_OUTGOING_CALL");
 		registerReceiver(receiver, filter);
 
 		tm = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
@@ -203,9 +225,9 @@ public class AddressService extends Service {
 		// 监听来电
 		listener = new MyPhoneStateListener();
 		tm.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
-		
-		wm = (WindowManager)getSystemService(WINDOW_SERVICE);
-		
+
+		wm = (WindowManager) getSystemService(WINDOW_SERVICE);
+
 		sp = getSharedPreferences("config", MODE_PRIVATE);
 	}
 
