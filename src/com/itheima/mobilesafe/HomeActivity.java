@@ -62,6 +62,10 @@ public class HomeActivity extends Activity {
 				
 				Intent intent;
 				switch (position) {
+				case 1://加载黑名单拦截界面
+					Intent it = new Intent(HomeActivity.this, CallSMSSafeActivity.class);
+					startActivity(it);
+					break;
 				case 8://设置中心
 					intent = new Intent(HomeActivity.this, SettingActivity.class);
 					startActivity(intent);

@@ -114,19 +114,20 @@ public class AddressService extends Service {
 		wm.addView(view, params);
 
 		view.setOnClickListener(new OnClickListener() {
-			
+
 			long[] mHits = new long[2];
+
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				System.arraycopy(mHits, 1, mHits, 0, mHits.length - 1);
 				mHits[mHits.length - 1] = SystemClock.uptimeMillis();
 				if (mHits[0] >= (SystemClock.uptimeMillis() - 500)) {
-					//双击，控件居中
-					params.x = (wm.getDefaultDisplay().getWidth() - view.getWidth()) /2;
+					// 双击，控件居中
+					params.x = (wm.getDefaultDisplay().getWidth() - view.getWidth()) / 2;
 					params.y = (wm.getDefaultDisplay().getHeight() - view.getHeight()) / 2;
 					wm.updateViewLayout(view, params);
-					
+
 					// 记录toast距离界面左上的距离
 					Editor eidt = sp.edit();
 					eidt.putInt("lastx", params.x);
