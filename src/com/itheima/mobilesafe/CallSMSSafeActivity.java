@@ -7,6 +7,7 @@ import com.itheima.mobilesafe.domain.BlackNumberInfo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -54,6 +55,8 @@ public class CallSMSSafeActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
+			
+			Log.i(TAG, position);
 			View view = View.inflate(getApplicationContext(), R.layout.list_item_callsms, null);
 			TextView tv_black_number = (TextView) view.findViewById(R.id.tv_black_number);
 			TextView tv_block_mode = (TextView) view.findViewById(R.id.tv_block_mode);
