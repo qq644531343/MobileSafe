@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewDebug.FlagToString;
 
 import com.itheima.mobilesafe.service.AddressService;
+import com.itheima.mobilesafe.service.CallSMSSafeService;
 import com.itheima.mobilesafe.ui.SettingClickView;
 import com.itheima.mobilesafe.ui.SettingItemView;
 import com.itheima.mobilesafe.utils.ServiceUtils;
@@ -25,10 +26,14 @@ public class SettingActivity extends Activity {
 	// 设置是否开启来电归属地显示
 	private SettingItemView siv_show_address;
 	private Intent showAddressIntent;
-	
-	//设置归属地显示背景
+
+	// 设置归属地显示背景
 	private SettingClickView scv_changebg;
 	private SharedPreferences sp;
+
+	// 黑名单拦截
+	private SettingItemView siv_callsms_safe;
+	private Intent callSMSSafeIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -37,8 +42,8 @@ public class SettingActivity extends Activity {
 		setContentView(R.layout.activity_setting);
 
 		sp = getSharedPreferences("config", MODE_PRIVATE);
-		
-		//设置是否自动升级
+
+		// 设置是否自动升级
 		siv_update = (SettingItemView) findViewById(R.id.siv_update);
 
 		boolean update = sp.getBoolean("update", false);
@@ -52,77 +57,120 @@ public class SettingActivity extends Activity {
 				Editor editor = sp.edit();
 				// 判断是否选中
 				if (siv_update.isChecked()) {// 已打开自动升级
-					siv_update.setChecked(!siv_update
-							.isChecked());
+					siv_update.setChecked(!siv_update.isChecked());
 					editor.putBoolean("update", false);
 				} else {// 没打开自动升级
-					siv_update.setChecked(!siv_update
-							.isChecked());
+					siv_update.setChecked(!siv_update.isChecked());
 					editor.putBoolean("update", true);
 				}
 				editor.commit();
 			}
 		});
-		
-		//设置是否开启来电归属地显示
-		siv_show_address = (SettingItemView)findViewById(R.id.siv_show_address);
+
+		// 设置是否开启来电归属地显示
+		siv_show_address = (SettingItemView) findViewById(R.id.siv_show_address);
 		showAddressIntent = new Intent(this, AddressService.class);
-		boolean isRunning = ServiceUtils.isServiceRunning(this, "com.itheima.mobilesafe.service.AddressService");
+		boolean isRunning = ServiceUtils
+				.isServiceRunning(this, "com.itheima.mobilesafe.service.AddressService");
 		siv_show_address.setChecked(isRunning);
 		siv_show_address.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				//监听来电显示的服务已开启
+				// 监听来电显示的服务已开启
 				if (siv_show_address.isChecked()) {
-					//关闭
+					// 关闭
 					stopService(showAddressIntent);
 					siv_show_address.setChecked(false);
-				}else {
-					//开启
+				} else {
+					// 开启
 					startService(showAddressIntent);
 					siv_show_address.setChecked(true);
 				}
-				
+
 			}
 		});
-		
-		//归属地背景
-		scv_changebg = (SettingClickView)findViewById(R.id.scv_changebg);
-		final String[] items = {"半透明","活力橙","卫士蓝","金属灰","苹果绿"};
+
+		// 归属地背景
+		scv_changebg = (SettingClickView) findViewById(R.id.scv_changebg);
+		final String[] items = { "半透明", "活力橙", "卫士蓝", "金属灰", "苹果绿" };
 		int which = sp.getInt("which", 0);
 		scv_changebg.setDesc(items[which]);
 		scv_changebg.setOnClickListener(new OnClickListener() {
-			
+
 			@Override
 			public void onClick(View v) {
-				
-				//弹出对话框
+
+				// 弹出对话框
 				AlertDialog.Builder builder = new AlertDialog.Builder(SettingActivity.this);
 				builder.setTitle("归属地提示框风格");
 				int dd = sp.getInt("which", 0);
 				scv_changebg.setDesc(items[dd]);
-				builder.setSingleChoiceItems(items, dd , new DialogInterface.OnClickListener() {
-					
+				builder.setSingleChoiceItems(items, dd, new DialogInterface.OnClickListener() {
+
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						// TODO Auto-generated method stub
-						//保存选择的样式
+						// TODO Auto-generated method
+						// stub
+						// 保存选择的样式
 						Editor editor = sp.edit();
 						editor.putInt("which", which);
 						editor.commit();
 						scv_changebg.setDesc(items[which]);
-						
-						//取消对话框
+
+						// 取消对话框
 						dialog.dismiss();
 					}
 				});
 				builder.setNegativeButton("cancel", null);
 				builder.show();
-				
+
 			}
 		});
 
+		// 黑名单拦截
+		siv_callsms_safe = (SettingItemView) findViewById(R.id.siv_callsms_safe);
+		callSMSSafeIntent = new Intent(this, CallSMSSafeService.class);
+		siv_callsms_safe.setChecked(isRunning);
+		siv_callsms_safe.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// 监听服务已开启
+				if (siv_callsms_safe.isChecked()) {
+					// 关闭
+					stopService(callSMSSafeIntent);
+					siv_callsms_safe.setChecked(false);
+				} else {
+					// 开启
+					startService(callSMSSafeIntent);
+					siv_callsms_safe.setChecked(true);
+				}
+
+			}
+		});
+	}
+	
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+		showAddressIntent = new Intent(this, AddressService.class);
+		boolean isServiceRunning = ServiceUtils.isServiceRunning(
+				SettingActivity.this,
+				"com.itheima.mobilesafe.service.AddressService");
+		
+		if(isServiceRunning){
+			siv_show_address.setChecked(true);
+		}else{
+			siv_show_address.setChecked(false);
+		}
+		
+		boolean iscallSmsServiceRunning = ServiceUtils.isServiceRunning(
+				SettingActivity.this,
+				"com.itheima.mobilesafe.service.CallSmsSafeService");
+		siv_callsms_safe.setChecked(iscallSmsServiceRunning);
+		
 	}
 
 }
