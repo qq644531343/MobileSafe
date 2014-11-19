@@ -41,8 +41,8 @@ public class BlackNumberDao {
 
 		while (cursor.moveToNext()) {
 			BlackNumberInfo info = new BlackNumberInfo();
-			String number  = cursor.getString(0);
-			String mode  = cursor.getString(1);
+			String number = cursor.getString(0);
+			String mode = cursor.getString(1);
 			info.setNumber(number);
 			info.setModel(mode);
 			list.add(info);
@@ -63,6 +63,23 @@ public class BlackNumberDao {
 		Cursor cursor = db.rawQuery("select * from blacknumber where number = ?", new String[] { number });
 		if (cursor.moveToNext()) {
 			result = true;
+		}
+		cursor.close();
+		db.close();
+		return result;
+	}
+	
+	/**
+	 * 查询黑名单号码拦截模式
+	 */
+	public String findMode(String number) {
+
+		String result = null;
+
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select mode from blacknumber where number = ?", new String[] { number });
+		if (cursor.moveToNext()) {
+			result = cursor.getString(0);
 		}
 		cursor.close();
 		db.close();
