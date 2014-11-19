@@ -5,6 +5,7 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -165,11 +166,23 @@ public class CallSMSSafeActivity extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					// 删除
-					BlackNumberInfo info = infos.get(position);
-					dao.delete(info.getNumber());
-					infos.remove(position);
-					adapter.notifyDataSetChanged();
+					
+					AlertDialog.Builder builder = new Builder(CallSMSSafeActivity.this);
+					builder.setTitle("警告");
+					builder.setMessage("确定要删除这条记录吗?");
+					builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+						
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// 删除
+							BlackNumberInfo info = infos.get(position);
+							dao.delete(info.getNumber());
+							infos.remove(position);
+							adapter.notifyDataSetChanged();
+						}
+					});
+					builder.setNegativeButton("取消", null);
+					builder.show();
 				}
 			});
 
