@@ -131,6 +131,8 @@ public class SettingActivity extends Activity {
 		// 黑名单拦截
 		siv_callsms_safe = (SettingItemView) findViewById(R.id.siv_callsms_safe);
 		callSMSSafeIntent = new Intent(this, CallSMSSafeService.class);
+		isRunning = ServiceUtils
+				.isServiceRunning(this, "com.itheima.mobilesafe.service.CallSMSSafeService");
 		siv_callsms_safe.setChecked(isRunning);
 		siv_callsms_safe.setOnClickListener(new OnClickListener() {
 
@@ -168,7 +170,7 @@ public class SettingActivity extends Activity {
 		
 		boolean iscallSmsServiceRunning = ServiceUtils.isServiceRunning(
 				SettingActivity.this,
-				"com.itheima.mobilesafe.service.CallSmsSafeService");
+				"com.itheima.mobilesafe.service.CallSMSSafeService");
 		siv_callsms_safe.setChecked(iscallSmsServiceRunning);
 		
 	}

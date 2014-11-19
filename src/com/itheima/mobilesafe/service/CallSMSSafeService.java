@@ -33,13 +33,13 @@ public class CallSMSSafeService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			Log.i(TAG, "内部广播接收者，短信到来了");
 			//检查发件人是否是黑名单号码，且设置了短信拦截或全部拦截
-			Object[] objects= (Object[])intent.getExtras().get("dpus");
-			for (Object object : objects) {
-				SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) object);
+			Object[] objs = (Object[]) intent.getExtras().get("pdus");
+			for (Object obj : objs){
+				SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) obj);
 				String sender = smsMessage.getOriginatingAddress();
 				String resultString = dao.findMode(sender);
 				if ("2".equals(resultString)  || "3".equals(resultString)) {
-					Log.i(TAG, "拦截短信:" + sender + smsMessage.getMessageBody());
+					Log.i(TAG, "拦截短信:" + sender+ " 说：" + smsMessage.getMessageBody());
 					abortBroadcast();
 				}
 			}
