@@ -24,5 +24,15 @@
         android:text="拦截模式"
         android:textColor="#88000000"
         android:textSize="15sp" />
+    
+    <ImageView 
+        android:id="@+id/iv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/delete_selector"
+        android:layout_marginRight="3dip"
+        />
 
 </RelativeLayout>
