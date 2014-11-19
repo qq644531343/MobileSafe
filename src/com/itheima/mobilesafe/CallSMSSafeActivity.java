@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 public class CallSMSSafeActivity extends Activity {
 
+	public static final String TAG = "CallSMSSafeActivity";
 	private ListView lv_callsms_safe;
 	private List<BlackNumberInfo> infos;
 	private BlackNumberDao dao;
@@ -56,20 +57,40 @@ public class CallSMSSafeActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			
-			Log.i(TAG, position);
-			View view = View.inflate(getApplicationContext(), R.layout.list_item_callsms, null);
-			TextView tv_black_number = (TextView) view.findViewById(R.id.tv_black_number);
-			TextView tv_block_mode = (TextView) view.findViewById(R.id.tv_block_mode);
-			tv_black_number.setText(infos.get(position).getNumber());
+			//view对象复用
+			View view = null;
+			ViewHolder holder;
+			if (convertView == null) {
+				view = View.inflate(getApplicationContext(), R.layout.list_item_callsms, null);
+				//加快子view的查找速度
+				holder = new ViewHolder();
+				holder.tv_number  = (TextView) view.findViewById(R.id.tv_black_number);
+				holder.tv_model  = (TextView) view.findViewById(R.id.tv_block_mode);
+				view.setTag(holder);
+			}else {
+				view = convertView;
+				holder = (ViewHolder)view.getTag();
+			}
+			
+			holder.tv_number.setText(infos.get(position).getNumber());
 			String mode = infos.get(position).getModel();
 			if ("1".equals(mode)) {
-				tv_block_mode.setText("电话拦截");
+				holder.tv_model.setText("电话拦截");
 			} else if ("2".equals(mode)) {
-				tv_block_mode.setText("短信拦截");
+				holder.tv_model.setText("短信拦截");
 			} else {
-				tv_block_mode.setText("全部拦截");
+				holder.tv_model.setText("全部拦截");
 			}
 			return view;
+		}
+		
+		/**
+		 * 	View对象的容器，记录子View
+		 */
+		class ViewHolder
+		{
+			TextView tv_number;
+			TextView tv_model;
 		}
 
 	}
