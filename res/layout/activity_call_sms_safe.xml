@@ -4,21 +4,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <TextView
-        android:textSize="22sp"
-        android:textColor="#000000"
-        android:background="#8866ff00"
-        android:id="@+id/textView1"
+    <RelativeLayout
         android:layout_width="fill_parent"
-        android:layout_height="55dip"
-        android:gravity="center"
-        android:text="黑名单拦截"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
-  	<ListView 
-  	    	android:id="@+id/lv_callsms_safe"
-  	    	android:layout_width="fill_parent"
-  	    	android:layout_height="fill_parent"
-  	    ></ListView>
+        android:layout_height="55dip" >
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="55dip"
+            android:background="#8866ff00"
+            android:gravity="center"
+            android:text="黑名单拦截"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#000000"
+            android:textSize="22sp" />
+
+        <Button
+            android:onClick="addBlackNunber"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="添加"
+             />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_callsms_safe"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+    </ListView>
 
 </LinearLayout>
