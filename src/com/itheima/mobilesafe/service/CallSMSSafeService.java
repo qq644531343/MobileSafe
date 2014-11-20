@@ -8,10 +8,15 @@ import com.itheima.mobilesafe.db.dao.BlackNumberDao;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.ContentObserver;
+import android.net.Uri;
+import android.os.Handler;
 import android.os.IBinder;
+import android.provider.CallLog;
 import android.telephony.PhoneStateListener;
 import android.telephony.SmsMessage;
 import android.telephony.TelephonyManager;
@@ -95,7 +100,15 @@ public class CallSMSSafeService extends Service {
 				System.out.println("result " + resultString + "  incomming:" + incomingNumber);
 				if ("1".equals(resultString) || "3".equals(resultString)) {
 					Log.i(TAG, "拦截电话: " + incomingNumber);
-					endCall();
+					//挂断电话
+					endCall(); //非同步线程
+					
+					//删除呼叫记录
+//					deleteCallLog(incomingNumber);
+					//观察呼叫记录数据库内容变化
+					Uri uri =  Uri.parse("content://call_log/calls");
+					getContentResolver().registerContentObserver(uri, true, new MyContentObserver(incomingNumber,new Handler()));
+					
 				}
 				break;
 
@@ -124,6 +137,31 @@ public class CallSMSSafeService extends Service {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+	}
+
+	public void deleteCallLog(String incomingNumber) {
+		ContentResolver resolver = getContentResolver();
+		Uri uri =  Uri.parse("content://call_log/calls");
+		resolver.delete(uri, "number=?", new String[] {incomingNumber});
+	}
+	
+	private class MyContentObserver extends ContentObserver
+	{
+		private String incomingNumber;
+		public MyContentObserver(String incomingNumber ,Handler handler) {
+			super(handler);
+			this.incomingNumber = incomingNumber;
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			// TODO Auto-generated method stub
+			super.onChange(selfChange);
+			Log.i(TAG, "呼叫记录变化");
+			deleteCallLog(incomingNumber);
+			getContentResolver().unregisterContentObserver(this);
+		}
+		
 	}
 
 }
