@@ -117,6 +117,9 @@ public class CallSMSSafeService extends Service {
 			Method method =  clazz.getDeclaredMethod("getService", String.class);
 			IBinder iBinder = (IBinder) method.invoke(null, TELEPHONY_SERVICE);
 			ITelephony.Stub.asInterface(iBinder).endCall();
+			
+			//提示号码为空或已关机，原理为呼叫转移
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -124,3 +127,22 @@ public class CallSMSSafeService extends Service {
 	}
 
 }
+
+/*
+ 1、无条件转移 
+设置后所有来电将立即转接到预先设定的固定电话或其他信息工具上。 
+设置方法：拨*57*转出的电话号码#，听到证实音后挂机。 
+注销方式：拨#57#，听到证实音后挂机。 
+
+2、遇忙呼叫转移 
+用户在通话过程中有第三方对其呼叫，将电话转移至预先设好的固定电话或其他通信工具上。
+如果没有设置无应答呼叫转移，拒绝接听时也会将这个电话视为遇忙呼叫转移。 
+设置方法：拨*40*转出电话号码#，听到证实音后挂机。 
+注销方式：拨#40#，听到证实音后挂机。 
+
+3、无应答呼叫转移 
+
+接通后而无人应答对所发生的电话转移，一般小灵通上振铃超过6次而接听则视为无应答转移。 
+设置方法：拨*41*转出电话号码#，听到证实音后挂机。 
+注销方式：拨#41#，听到证实音后挂机。 
+ */
