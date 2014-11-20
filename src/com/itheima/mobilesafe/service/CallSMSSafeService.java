@@ -3,7 +3,6 @@ package com.itheima.mobilesafe.service;
 import java.util.Iterator;
 
 import com.itheima.mobilesafe.db.dao.BlackNumberDao;
-import com.itheima.mobilesafe.receiver.SMSReceiver;
 
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -11,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.IBinder;
+import android.renderscript.RenderScript.Priority;
 import android.telephony.SmsMessage;
 import android.util.Log;
 
@@ -58,6 +58,7 @@ public class CallSMSSafeService extends Service {
 		// 注册广播接收者
 		receiver = new InnerSMSReceiver();
 		IntentFilter filter = new IntentFilter("android.provider.Telephony.SMS_RECEIVED");
+		filter.setPriority(IntentFilter.SYSTEM_HIGH_PRIORITY);
 		registerReceiver(receiver, filter);
 	}
 
