@@ -100,15 +100,14 @@ public class CallSMSSafeService extends Service {
 				System.out.println("result " + resultString + "  incomming:" + incomingNumber);
 				if ("1".equals(resultString) || "3".equals(resultString)) {
 					Log.i(TAG, "拦截电话: " + incomingNumber);
-					//挂断电话
-					endCall(); //非同步线程
 					
 					//删除呼叫记录
-//					deleteCallLog(incomingNumber);
 					//观察呼叫记录数据库内容变化
 					Uri uri =  Uri.parse("content://call_log/calls");
 					getContentResolver().registerContentObserver(uri, true, new MyContentObserver(incomingNumber,new Handler()));
 					
+					//挂断电话
+					endCall(); //非同步线程
 				}
 				break;
 
