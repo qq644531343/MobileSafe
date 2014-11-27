@@ -2,6 +2,7 @@ package com.itheima.mobilesafe;
 
 import java.util.List;
 
+import android.R.integer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -11,11 +12,14 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +34,9 @@ public class CallSMSSafeActivity extends Activity {
 	private List<BlackNumberInfo> infos;
 	private BlackNumberDao dao;
 	private CallSMSAdapter adapter;
+	private LinearLayout ll_loading;
+	private int offset;
+	private int maxnumber;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +45,80 @@ public class CallSMSSafeActivity extends Activity {
 		setContentView(R.layout.activity_call_sms_safe);
 
 		lv_callsms_safe = (ListView) findViewById(R.id.lv_callsms_safe);
+		ll_loading = (LinearLayout)findViewById(R.id.ll_Loading);
 		dao = new BlackNumberDao(this);
-		infos = dao.findAll();
-		adapter = new CallSMSAdapter();
-		lv_callsms_safe.setAdapter(adapter);
 
+		fillData();
+		
+		//listview滚动事件
+		lv_callsms_safe.setOnScrollListener(new OnScrollListener() {
+			
+			//滚动状态变化
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				switch (scrollState) {
+				case OnScrollListener.SCROLL_STATE_IDLE: //空闲
+					//判断listview的滚动位置
+					//获取最后一个可见条目再集合里的位置 (0 ~ (length -1))
+					int lastposition = lv_callsms_safe.getLastVisiblePosition();
+					if(lastposition == infos.size() - 1)
+					{	
+						System.out.println("已移动到最后位置，加载更多数据");
+						offset += maxnumber;
+						fillData();
+					}
+					
+					break;
+				case OnScrollListener.SCROLL_STATE_TOUCH_SCROLL://手指触摸滚动
+					
+					break;
+				case OnScrollListener.SCROLL_STATE_FLING://惯性滑行
+					
+					break;
+
+				default:
+					break;
+				}
+				
+			}
+			
+			//滚动
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+				
+				
+			}
+		});
+
+	}
+
+	private void fillData() {
+		ll_loading.setVisibility(View.VISIBLE);
+		new Thread() {
+			public void run() {
+				if (infos == null) {
+					infos = dao.findPart(offset, maxnumber);
+				}else{
+					infos.addAll(dao.findPart(offset, maxnumber));
+				}
+				
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						ll_loading.setVisibility(View.INVISIBLE);
+						if (adapter == null) {
+							adapter = new CallSMSAdapter();
+							lv_callsms_safe.setAdapter(adapter);
+						}else{
+							adapter.notifyDataSetChanged();
+						}
+						
+						
+					}
+				});
+			};
+		}.start();
 	}
 
 	private EditText et_blacknumber;
@@ -166,12 +242,12 @@ public class CallSMSSafeActivity extends Activity {
 
 				@Override
 				public void onClick(View v) {
-					
+
 					AlertDialog.Builder builder = new Builder(CallSMSSafeActivity.this);
 					builder.setTitle("警告");
 					builder.setMessage("确定要删除这条记录吗?");
 					builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-						
+
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// 删除

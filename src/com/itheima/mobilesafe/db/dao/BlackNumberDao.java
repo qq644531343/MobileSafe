@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.R.bool;
 import android.R.color;
+import android.R.integer;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -36,6 +37,32 @@ public class BlackNumberDao {
 
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor cursor = db.rawQuery("select number,mode from blacknumber order by _id desc", null);
+
+		List<BlackNumberInfo> list = new ArrayList<BlackNumberInfo>();
+
+		while (cursor.moveToNext()) {
+			BlackNumberInfo info = new BlackNumberInfo();
+			String number = cursor.getString(0);
+			String mode = cursor.getString(1);
+			info.setNumber(number);
+			info.setModel(mode);
+			list.add(info);
+		}
+		cursor.close();
+		db.close();
+		return list;
+	}
+	
+	/**
+	 * 分页查询黑名单
+	 * @param offset 开始位置
+	 * @param maxnumber 条数
+	 * @return
+	 */
+	public List<BlackNumberInfo> findPart(int offset, int maxnumber) {
+
+		SQLiteDatabase db = helper.getReadableDatabase();
+		Cursor cursor = db.rawQuery("select number,mode from blacknumber order by _id desc limit ?,?", new String[]{String.valueOf(offset),String.valueOf(maxnumber) });
 
 		List<BlackNumberInfo> list = new ArrayList<BlackNumberInfo>();
 
