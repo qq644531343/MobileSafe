@@ -1,9 +1,12 @@
 package com.itheima.mobilesafe;
 
+import com.itheima.mobilesafe.utils.SMSUtils;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * 	高级工具
@@ -29,4 +32,24 @@ public class AtoolsActivity extends Activity {
 		startActivity(it);
 	}
 	
+	/**
+	 * 	短信备份
+	 */
+	public void smsBackup(View view) {
+		try {
+			SMSUtils.backupSMS(this);
+			Toast.makeText(this, "备份短信成功", 1).show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			Toast.makeText(this, "备份短信失败", 1).show();
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 短信还原
+	 */
+	public void smsRestore(View view) {
+		
+	}
 }
