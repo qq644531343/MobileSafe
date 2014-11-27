@@ -94,6 +94,12 @@ public class AtoolsActivity extends Activity {
 	 * 短信还原
 	 */
 	public void smsRestore(View view) {
-		
+		try {
+			SMSUtils.restoreSMS(AtoolsActivity.this, false);
+			Toast.makeText(AtoolsActivity.this, "短信已恢复", 1).show();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
