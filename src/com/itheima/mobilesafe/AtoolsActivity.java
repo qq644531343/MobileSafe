@@ -3,6 +3,7 @@ package com.itheima.mobilesafe;
 import com.itheima.mobilesafe.utils.SMSUtils;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -14,6 +15,8 @@ import android.widget.Toast;
  *
  */
 public class AtoolsActivity extends Activity {
+	
+	private ProgressDialog pd;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,14 +39,55 @@ public class AtoolsActivity extends Activity {
 	 * 	短信备份
 	 */
 	public void smsBackup(View view) {
-		try {
-			SMSUtils.backupSMS(this);
-			Toast.makeText(this, "备份短信成功", 1).show();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			Toast.makeText(this, "备份短信失败", 1).show();
-			e.printStackTrace();
-		}
+		
+		pd = new ProgressDialog(this);
+		pd.setMessage("正在备份短信");
+		pd.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		pd.show();
+		
+		new Thread(){
+			@Override
+			public void run() {
+				try {
+					SMSUtils.backupSMS(AtoolsActivity.this, new SMSUtils.BackUpCallBack() {
+						
+						@Override
+						public void onSmsBackup(int progress) {
+							pd.setProgress(progress);
+						}
+						
+						@Override
+						public void beforeBackup(int max) {
+							pd.setMax(max);
+						}
+					});
+					
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							Toast.makeText(AtoolsActivity.this, "备份短信成功", 1).show();
+							
+						}
+					});
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					runOnUiThread(new Runnable() {
+						
+						@Override
+						public void run() {
+							Toast.makeText(AtoolsActivity.this, "备份短信失败", 1).show();
+							
+						}
+					});
+					e.printStackTrace();
+				}finally {
+					pd.dismiss();
+				}
+	
+			}
+		}.start();
 	}
 	
 	/**
