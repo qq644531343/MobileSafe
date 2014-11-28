@@ -63,8 +63,8 @@ public class HomeActivity extends Activity {
 				Intent intent;
 				switch (position) {
 				case 1://加载黑名单拦截界面
-					Intent it = new Intent(HomeActivity.this, CallSMSSafeActivity.class);
-					startActivity(it);
+					intent = new Intent(HomeActivity.this, CallSMSSafeActivity.class);
+					startActivity(intent);
 					break;
 				case 8://设置中心
 					intent = new Intent(HomeActivity.this, SettingActivity.class);
@@ -73,7 +73,10 @@ public class HomeActivity extends Activity {
 				case 0://手机防盗
 					showLostFindDialog();
 					break;
-					
+				case 2://软件管理
+					intent = new Intent(HomeActivity.this,AppManagerActivity.class);
+					startActivity(intent);
+					break;
 				case 7://高级工具
 					intent = new Intent(HomeActivity.this, AtoolsActivity.class);
 					startActivity(intent);
