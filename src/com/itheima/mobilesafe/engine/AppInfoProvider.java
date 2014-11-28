@@ -3,7 +3,9 @@ package com.itheima.mobilesafe.engine;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.R.integer;
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
@@ -32,11 +34,31 @@ public class AppInfoProvider {
 			String packName = info.packageName;
 			Drawable packIcon = info.applicationInfo.loadIcon(pm);
 			String name = info.applicationInfo.loadLabel(pm).toString();
+			boolean userApp;
+			boolean inRom;
+			
+			int flags = info.applicationInfo.flags;
+			if ((flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+			//用户程序
+				userApp = true;
+			}else{
+			//系统程序
+				userApp = false;
+			}
+			if ((flags & ApplicationInfo.FLAG_EXTERNAL_STORAGE) == 0) {
+				//安装在手机内存
+				inRom = true;
+			}else{
+				//安装在存储卡
+				inRom = false;
+			}
+			
 			AppInfo appInfo = new AppInfo();
 			appInfo.setName(name);
 			appInfo.setIcon(packIcon);
 			appInfo.setPackname(packName);
-			
+			appInfo.setInRom(inRom);
+			appInfo.setUserApp(userApp);
 			appInfos.add(appInfo);
 		}
 		
