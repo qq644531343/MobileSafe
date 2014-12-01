@@ -6,9 +6,13 @@ import java.util.List;
 import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
@@ -33,6 +37,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.itheima.mobilesafe.domain.AppInfo;
 import com.itheima.mobilesafe.engine.AppInfoProvider;
@@ -87,27 +92,7 @@ public class AppManagerActivity extends Activity implements OnClickListener{
 		ll_Loading = (LinearLayout) findViewById(R.id.ll_Loading);
 
 		ll_Loading.setVisibility(View.VISIBLE);
-		new Thread() {
-			public void run() {
-
-				// 获取应用程序信息
-				getAllAppInfos();
-
-				runOnUiThread(new Runnable() {
-
-					@Override
-					public void run() {
-						if (adapter == null) {
-							adapter = new AppManagerAdapter();
-							lv_app_manager.setAdapter(adapter);
-						} else {
-							adapter.notifyDataSetChanged();
-						}
-						ll_Loading.setVisibility(View.INVISIBLE);
-					}
-				});
-			};
-		}.start();
+		fillData();
 
 		lv_app_manager.setOnScrollListener(new OnScrollListener() {
 
@@ -178,12 +163,40 @@ public class AppManagerActivity extends Activity implements OnClickListener{
 		});
 	}
 
+	public void fillData() {
+		new Thread() {
+			public void run() {
+
+				// 获取应用程序信息
+				getAllAppInfos();
+
+				runOnUiThread(new Runnable() {
+
+					@Override
+					public void run() {
+						if (adapter == null) {
+							adapter = new AppManagerAdapter();
+							lv_app_manager.setAdapter(adapter);
+						} else {
+							System.out.println(adapter);
+							adapter.notifyDataSetChanged();
+						}
+						ll_Loading.setVisibility(View.INVISIBLE);
+					}
+				});
+			};
+		}.start();
+	}
+
 	protected void getAllAppInfos() {
 
 		appInfos = AppInfoProvider.getAppInfos(AppManagerActivity.this);
 		if (userAppInfos == null || sysAppInfos == null) {
 			userAppInfos = new ArrayList<AppInfo>();
 			sysAppInfos = new ArrayList<AppInfo>();
+		}else{
+			userAppInfos.clear();
+			sysAppInfos.clear();
 		}
 		for (AppInfo info : appInfos) {
 			if (info.isUserApp()) {
@@ -309,19 +322,72 @@ public class AppManagerActivity extends Activity implements OnClickListener{
 		switch (v.getId()) {
 		case R.id.ll_share:
 			Log.i(TAG, "分享：" + appInfo.getName());
-			
+			shareApplication();
 			break;
 		case R.id.ll_start:
 			Log.i(TAG, "启动：" + appInfo.getName());
-			
+			startApplication();
 			break;
 		case R.id.ll_uninstall:
 			Log.i(TAG, "卸载：" + appInfo.getName());
-			
+			uninstallApplication();
 			break;
 		default:
 			break;
 		}
 		
+	}
+
+	private void shareApplication() {
+		
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.SEND");
+		intent.addCategory(Intent.CATEGORY_DEFAULT);
+		intent.setType("text/plain");
+		intent.putExtra(Intent.EXTRA_TEXT, "推荐使用：" + appInfo.getName());
+		startActivity(intent);
+		
+	}
+
+	//卸载应用
+	private void uninstallApplication() {
+		
+		Intent intent = new Intent();
+		intent.setAction("android.intent.action.VIEW");
+		intent.setAction("android.intent.action.DELETE");
+		intent.addCategory("android.intent.category.DEFAULT");
+		intent.setData(Uri.parse("package:"+appInfo.getPackname()));
+		startActivityForResult(intent, 0);
+		
+		//Root权限卸载系统app
+		//cd /system/app/
+		//mount -o remount, rw /system
+		//rm -r Browser.apk
+		//Runtime.getRuntime().exec("")
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// TODO Auto-generated method stub
+		fillData();
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	//开启应用程序
+	private void startApplication() {
+		
+		PackageManager pm = getPackageManager();
+//		Intent intent = new Intent();
+//		intent.setAction("android.intent.action.MAIN");
+//		intent.addCategory("android.intent.category.LAUNCHER");
+//		//查出全部具有启动能力的activity
+//		List<ResolveInfo> infos =   pm.queryIntentActivities(intent, PackageManager.GET_INTENT_FILTERS);
+		
+		Intent intent = pm.getLaunchIntentForPackage(appInfo.getPackname());
+		if(intent != null){
+			startActivity(intent);
+		}else{
+			Toast.makeText(this, "无法启动该应用", 1).show();
+		}
 	}
 }

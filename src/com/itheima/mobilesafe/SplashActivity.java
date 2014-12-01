@@ -32,20 +32,25 @@ import android.content.SharedPreferences;
 import android.content.DialogInterface.OnCancelListener;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewDebug.FlagToString;
 import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.itheima.mobilesafe.R.color;
 import com.itheima.mobilesafe.utils.StreamTools;
 
 public class SplashActivity extends Activity {
@@ -112,6 +117,9 @@ public class SplashActivity extends Activity {
 		tv_splash_version.setText(getString(R.string.appversion) + getVersionName());
 		tv_splash_updateinfo = (TextView)findViewById(R.id.tv_splash_updateinfo);
 		
+		//创造快捷图标
+		installShortCut();
+		
 		//拷贝归属地数据库
 		copyDB();
 		
@@ -138,6 +146,33 @@ public class SplashActivity extends Activity {
 		
 	}
 	
+	/**
+	 * 创建快捷图标
+	 */
+	private void installShortCut() {
+		
+		boolean shotcurt = sp.getBoolean("shortcut", false);
+		if (shotcurt) {
+			return;
+		}
+		Editor editor = sp.edit();
+		// TODO Auto-generated method stub
+		Intent intent = new Intent();
+		intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+		//快捷方式包含3个重要信息：名称；图标；用途
+		intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, "手机小卫士");
+		intent.putExtra(Intent.EXTRA_SHORTCUT_ICON, BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher));
+		Intent shortcutIntent = new Intent();
+		shortcutIntent.setAction("android.intent.action.MAIN");
+		shortcutIntent.addCategory("android.intent.category.LAUNCHER");
+		shortcutIntent.setClassName(getPackageName(), "com.itheima.mobilesafe.SplashActivity");
+		intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+		sendBroadcast(intent);
+		
+		editor.putBoolean("shortcut", true);
+		editor.commit();
+	}
+
 	private void copyDB() {
 		
 		//只需拷贝一次
