@@ -7,12 +7,21 @@ import android.R.integer;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.text.format.Formatter;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.ScaleAnimation;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -21,11 +30,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.itheima.mobilesafe.domain.AppInfo;
 import com.itheima.mobilesafe.engine.AppInfoProvider;
+import com.itheima.mobilesafe.utils.DensityUtil;
 
 /**
  * 软件管理
@@ -34,8 +45,9 @@ import com.itheima.mobilesafe.engine.AppInfoProvider;
  * 
  */
 @SuppressLint("NewApi")
-public class AppManagerActivity extends Activity {
+public class AppManagerActivity extends Activity implements OnClickListener{
 
+	private static final String TAG = "AppManagerActivity";
 	private TextView tv_avail_rom;
 	private TextView tv_avail_sd;
 	private ListView lv_app_manager;
@@ -47,6 +59,13 @@ public class AppManagerActivity extends Activity {
 	private List<AppInfo> sysAppInfos;// 系统应用信息
 
 	private AppManagerAdapter adapter;
+
+	private PopupWindow popupWindow;
+	private AppInfo appInfo;	//被点击的条目
+	
+	private LinearLayout ll_uninstall;
+	private LinearLayout ll_start;
+	private LinearLayout ll_share;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +120,7 @@ public class AppManagerActivity extends Activity {
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount,
 					int totalItemCount) {
-
+				dimissPopupWindow();
 				if (userAppInfos != null && sysAppInfos != null) {
 					if (firstVisibleItem > userAppInfos.size()) {
 						tv_status.setText("系统程序: " + sysAppInfos.size() + "个");
@@ -117,7 +136,7 @@ public class AppManagerActivity extends Activity {
 
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				AppInfo appInfo;
+				
 				if (position == 0) {
 					return;
 				} else if (position == (userAppInfos.size() + 1)) {
@@ -125,16 +144,42 @@ public class AppManagerActivity extends Activity {
 				} else if (position <= userAppInfos.size()) {
 					int newposition = position - 1;
 					appInfo = userAppInfos.get(newposition);
-				}else {
-					int newposition = position -1 - userAppInfos.size() - 1;
+				} else {
+					int newposition = position - 1 - userAppInfos.size() - 1;
 					appInfo = sysAppInfos.get(newposition);
 				}
+
+				dimissPopupWindow();
+				
+				View contentView = View.inflate(getApplicationContext(), R.layout.popup_app_item, null);
+				ll_uninstall = (LinearLayout)contentView.findViewById(R.id.ll_uninstall);
+				ll_start = (LinearLayout)contentView.findViewById(R.id.ll_start);
+				ll_share = (LinearLayout)contentView.findViewById(R.id.ll_share);
+				ll_uninstall.setOnClickListener(AppManagerActivity.this);
+				ll_share.setOnClickListener(AppManagerActivity.this);
+				ll_start.setOnClickListener(AppManagerActivity.this);
+				
+				popupWindow = new PopupWindow(contentView, -2, -2);
+				int[] location = new int[2];
+				view.getLocationInWindow(location);
+				popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+				popupWindow.showAtLocation(view, Gravity.LEFT | Gravity.TOP, DensityUtil.dip2px(AppManagerActivity.this, 60), location[1]);
+			
+				//!!!!动画要求窗体必须有背景颜色
+				ScaleAnimation sa = new ScaleAnimation(0.3f, 1.0f, 0.3f, 1.0f, Animation.RELATIVE_TO_SELF, 0,Animation.RELATIVE_TO_SELF, 0.5f);
+				sa.setDuration(300);
+				AlphaAnimation aa = new AlphaAnimation(0.5f, 1.0f);
+				AnimationSet set = new AnimationSet(false);
+				set.addAnimation(aa);
+				set.addAnimation(sa);
+				contentView.startAnimation(set);
+				
 			}
 		});
 	}
 
 	protected void getAllAppInfos() {
-		// TODO Auto-generated method stub
+
 		appInfos = AppInfoProvider.getAppInfos(AppManagerActivity.this);
 		if (userAppInfos == null || sysAppInfos == null) {
 			userAppInfos = new ArrayList<AppInfo>();
@@ -240,5 +285,43 @@ public class AppManagerActivity extends Activity {
 		long count = statFs.getAvailableBlocksLong();
 
 		return size * count;
+	}
+
+	public void dimissPopupWindow() {
+		// 把旧的弹出窗体关闭
+		if (popupWindow != null && popupWindow.isShowing()) {
+			popupWindow.dismiss();
+			popupWindow = null;
+		}
+	}
+
+	@Override
+	protected void onDestroy() {
+
+		dimissPopupWindow();
+		super.onDestroy();
+	}
+
+	//布局的点击时间
+	@Override
+	public void onClick(View v) {
+		dimissPopupWindow();
+		switch (v.getId()) {
+		case R.id.ll_share:
+			Log.i(TAG, "分享：" + appInfo.getName());
+			
+			break;
+		case R.id.ll_start:
+			Log.i(TAG, "启动：" + appInfo.getName());
+			
+			break;
+		case R.id.ll_uninstall:
+			Log.i(TAG, "卸载：" + appInfo.getName());
+			
+			break;
+		default:
+			break;
+		}
+		
 	}
 }
