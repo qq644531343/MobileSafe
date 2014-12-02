@@ -226,7 +226,9 @@ public class TaskManagerActivity extends Activity {
 	}
 	
 	protected void getAllTaskInfos() {
-
+		if (allTaskInfos != null) {
+			allTaskInfos.clear();
+		}
 		allTaskInfos = TaskInfoProvider.getTaskInfos(getApplicationContext());
 		if (userTaskInfos == null || sysTaskInfos == null) {
 			userTaskInfos = new ArrayList<TaskInfo>();
