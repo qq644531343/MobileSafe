@@ -8,9 +8,11 @@ import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Debug.MemoryInfo;
 
+import com.itheima.mobilesafe.R;
 import com.itheima.mobilesafe.domain.TaskInfo;
 
 /**
@@ -54,6 +56,8 @@ public class TaskInfoProvider {
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				taskInfo.setIcon(context.getResources().getDrawable(R.drawable.ic_default));
+				taskInfo.setName(packname);
 			}
 			taskInfos.add(taskInfo);
 		}

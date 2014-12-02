@@ -36,6 +36,7 @@
     </RelativeLayout>
 
     <FrameLayout
+        android:layout_weight="9999"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" >
 
@@ -73,5 +74,37 @@
             />
         
     </FrameLayout>
-
+	
+    <LinearLayout 
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:orientation="horizontal"
+        >
+        <Button 
+            android:onClick="selectAll"
+            android:layout_width="8dip"
+              android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="全选"/>
+         <Button 
+             android:onClick="selectOpposite"
+            android:layout_width="8dip"
+              android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="反选"/>
+          <Button 
+              android:onClick="killAll"
+            android:layout_width="8dip"
+              android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="清理"/>
+          <Button 
+              android:onClick="enterSetting"
+            android:layout_width="8dip"
+              android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="设置"/>
+        
+    </LinearLayout>
+    
 </LinearLayout>

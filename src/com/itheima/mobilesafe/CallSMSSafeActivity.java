@@ -36,7 +36,7 @@ public class CallSMSSafeActivity extends Activity {
 	private CallSMSAdapter adapter;
 	private LinearLayout ll_loading;
 	private int offset;
-	private int maxnumber;
+	private int maxnumber = 10;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
