@@ -60,6 +60,7 @@
         <activity android:name=".NumberAddressQueryActivity" />
         <activity android:name=".CallSMSSafeActivity" />
         <activity android:name=".AppManagerActivity"/>
+        <activity android:name=".TaskManagerActivity"/>
 
         <receiver android:name=".receiver.BootCompleteReceiver" >
             <intent-filter>
