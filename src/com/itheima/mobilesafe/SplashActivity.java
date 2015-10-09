@@ -50,7 +50,7 @@ import android.view.animation.AlphaAnimation;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.itheima.mobilesafe.R.color;
+import com.itheima.mobilesafe.R;
 import com.itheima.mobilesafe.utils.StreamTools;
 
 public class SplashActivity extends Activity {
